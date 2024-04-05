@@ -1,7 +1,7 @@
 import express from "express";
 import userProfile from "../model/userprofile";
 import { verifyToken } from "../utils/auth";
-import user from "../model/user";
+
 
 enum Activity {
     low = "low",

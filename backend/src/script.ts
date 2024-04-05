@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import userlogin from "./routes/user"
 import connect from './config/dbconfig';
 import userprofile from './routes/userprofile';
+import foodproduct from './routes/foodproduct';
+import meal from './routes/meal';
 const port=process.env.PORT || 8000;
 const app = express();
 app.use(cookieParser());
@@ -15,6 +17,8 @@ app.use(express.json());
 app.use(cors());
 app.use("/",userlogin);
 app.use("/user",userprofile);
+app.use("/food",foodproduct);
+app.use("/meal",meal);
 app.listen(port, async () => {
       await connect();
       console.log(`Server started at port:${port}`);

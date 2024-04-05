@@ -1,20 +1,61 @@
-import mongoose, { Schema,model, Document } from "mongoose";
-interface Meal extends Document {
-    userId: mongoose.Types.ObjectId;
-    mealType: string;
-    foodProducts: {
-        foodProductId: mongoose.Types.ObjectId;
-        quantity: number;
-    }[];
-    totalCalories: number;
+import { Document, Schema, model, Types } from "mongoose";
+
+export  interface FoodProductEntry {
+    foodProduct: Types.ObjectId; 
+    quantity: number;
+    addedAt: Date; 
 }
+
+export interface Meal extends Document {
+    userId: Types.ObjectId;
+    mealType:{
+    breakfast: {
+        foodProducts: FoodProductEntry[];
+        calories: number;
+    };
+    lunch: {
+        foodProducts: FoodProductEntry[];
+        calories: number;
+    };
+    dinner: {
+        foodProducts: FoodProductEntry[];
+        calories: number;
+    };
+}
+    totalCalories: number; 
+    createdAt: Date; 
+}
+
 const mealSchema = new Schema<Meal>({
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    mealType: { type: String, enum: ["breakfast", "lunch", "dinner"], required: true },
-    foodProducts: [{
-        foodProductId: { type: Schema.Types.ObjectId, ref: "foodProduct", required: true },
-        quantity: { type: Number, required: true }
-    }],
-    totalCalories: { type: Number, default: 0 } 
+    mealType:{
+    breakfast: {
+        foodProducts: [{
+            foodProduct: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+            quantity: { type: Number, required: true },
+            addedAt: { type: Date, default: Date.now },
+        }],
+        calories: { type: Number, default: 0 }
+    },
+    lunch: {
+        foodProducts: [{
+            foodProduct: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+            quantity: { type: Number, required: true },
+            addedAt: { type: Date, default: Date.now },
+        }],
+        calories: { type: Number, default: 0 }
+    },
+    dinner: {
+        foodProducts: [{
+            foodProduct: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+            quantity: { type: Number, required: true },
+            addedAt: { type: Date, default: Date.now },
+        }],
+        calories: { type: Number, default: 0 }
+    }
+},
+    totalCalories: { type: Number, default: 0 }, 
+    createdAt: { type: Date, default: Date.now } 
 });
-export default model<Meal>("meal",mealSchema)
+
+export default model<Meal>("Meal", mealSchema);

@@ -46,22 +46,6 @@ router.get("/logout", (req, res) => {
     res.cookie("token", "", { expires: new Date(0) });
     res.send("logged out successfully");
 });
-router.put("/update-password/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const userId = req.params.userId;
-        const { newPassword } = req.body;
-        const hashPassword = yield bcrypt_1.default.hash(newPassword, saltRounds);
-        const updatedUser = yield user_1.default.findByIdAndUpdate(userId, { password: hashPassword }, { new: true });
-        if (!updatedUser) {
-            return res.status(404).send("User not found");
-        }
-        res.send("Password updated successfully");
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
-}));
 router.delete("/deleteUser/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.params.userId;

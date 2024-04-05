@@ -6,6 +6,6 @@ const userProfileSchema = new mongoose_1.Schema({
     weight: { type: Number, required: true },
     height: { type: Number, required: true },
     age: { type: Number, required: true },
-    activity: { type: String, enum: ["low", "moderate", "high"], required: true }
+    activity: { type: String, enum: ["low", "moderate", "high"], required: true },
 });
 exports.default = (0, mongoose_1.model)("userProfile", userProfileSchema);
