@@ -8,7 +8,7 @@ interface FoodProduct extends Document {
     protein: number;
 }
 const foodProductSchema = new Schema<FoodProduct>({
-    name: { type: String, required: true },
+    name: { type: String, required: true, strictQuery: false },
     calories: { type: Number, required: true },
     fats: { type: Number, required: true },
     fibers: { type: Number, required: true },

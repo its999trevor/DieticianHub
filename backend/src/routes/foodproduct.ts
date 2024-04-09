@@ -13,6 +13,21 @@ catch(err){
     res.status(500).send(err);
 }
 })
+router.get("/showitem",async(req,res)=>{
+    try{
+        const name = req.body.name;
+        const regexPattern = new RegExp(`^${name}`, 'i');
+        
+        const newData = await foodproduct.find({ name: regexPattern });
+        res.json(newData);
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).send(err);
+
+    }
+
+})
 router.post("/addmany",async(req,res)=>{
     try{
         let foodProductsData = req.body;

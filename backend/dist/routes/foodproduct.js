@@ -26,6 +26,18 @@ router.post("/add", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).send(err);
     }
 }));
+router.get("/showitem", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const name = req.body.name;
+        const regexPattern = new RegExp(`^${name}`, 'i');
+        const newData = yield foodproduct_1.default.find({ name: regexPattern });
+        res.json(newData);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}));
 router.post("/addmany", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let foodProductsData = req.body;
