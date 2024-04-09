@@ -6,7 +6,7 @@ const mealSchema = new mongoose_1.Schema({
     mealType: {
         breakfast: {
             foodProducts: [{
-                    foodProduct: { type: mongoose_1.Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+                    productid: { type: mongoose_1.Schema.Types.ObjectId, ref: "FoodProduct", required: true },
                     quantity: { type: Number, required: true },
                     addedAt: { type: Date, default: Date.now },
                 }],
@@ -14,7 +14,7 @@ const mealSchema = new mongoose_1.Schema({
         },
         lunch: {
             foodProducts: [{
-                    foodProduct: { type: mongoose_1.Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+                    productid: { type: mongoose_1.Schema.Types.ObjectId, ref: "FoodProduct", required: true },
                     quantity: { type: Number, required: true },
                     addedAt: { type: Date, default: Date.now },
                 }],
@@ -22,7 +22,7 @@ const mealSchema = new mongoose_1.Schema({
         },
         dinner: {
             foodProducts: [{
-                    foodProduct: { type: mongoose_1.Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+                    productid: { type: mongoose_1.Schema.Types.ObjectId, ref: "FoodProduct", required: true },
                     quantity: { type: Number, required: true },
                     addedAt: { type: Date, default: Date.now },
                 }],

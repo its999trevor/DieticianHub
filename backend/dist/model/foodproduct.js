@@ -9,4 +9,4 @@ const foodProductSchema = new mongoose_1.Schema({
     carbs: { type: Number, required: true },
     protein: { type: Number, required: true }
 });
-exports.default = (0, mongoose_1.model)("foodProduct", foodProductSchema);
+exports.default = (0, mongoose_1.model)("FoodProduct", foodProductSchema);

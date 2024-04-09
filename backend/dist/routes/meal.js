@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const meal_1 = __importDefault(require("../model/meal"));
 const foodproduct_1 = __importDefault(require("../model/foodproduct"));
 const auth_1 = require("../utils/auth");
+const dailylog_1 = __importDefault(require("../model/dailylog"));
 const router = express_1.default.Router();
 router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -31,25 +32,48 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
             meal.mealType[mealType] = { foodProducts: [], calories: 0 };
         }
         for (const entry of foodProducts) {
-            console.log(entry.foodProduct);
-            const foodProduct = yield foodproduct_1.default.findById(entry.foodProduct);
+            const existingFoodProduct = meal.mealType[mealType].foodProducts.find((item) => item.productid == entry.productid);
+            const foodProduct = yield foodproduct_1.default.findById(entry.productid);
             if (foodProduct) {
                 const calories = foodProduct.calories * entry.quantity;
-                meal.mealType[mealType].foodProducts.push({
-                    foodProduct: entry.foodProduct,
-                    quantity: entry.quantity,
-                    addedAt: new Date()
-                });
+                if (existingFoodProduct) {
+                    existingFoodProduct.quantity += entry.quantity;
+                }
+                else {
+                    meal.mealType[mealType].foodProducts.push({
+                        productid: entry.productid,
+                        quantity: entry.quantity,
+                        addedAt: new Date()
+                    });
+                }
                 meal.mealType[mealType].calories += calories;
                 meal.totalCalories += calories;
             }
         }
         yield meal.save();
+        const existingLog = yield dailylog_1.default.findOne({ userId, date: currentDate });
+        if (!existingLog) {
+            const newLog = new dailylog_1.default({
+                userId,
+                date: currentDate,
+                mealeaten: [meal._id]
+            });
+            yield newLog.save();
+        }
         res.send(`Food products added to ${mealType} successfully`);
     }
     catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }
+}));
+router.get("/allmeals", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.user._doc._id;
+    console.log(userId);
+    const currentDate = new Date().setHours(0, 0, 0, 0);
+    let data = yield meal_1.default.findOne({ userId, createdAt: { $gte: currentDate } }).populate("mealType.breakfast.foodProducts.productid")
+        .populate("mealType.lunch.foodProducts.productid")
+        .populate("mealType.dinner.foodProducts.productid");
+    res.json(data);
 }));
 exports.default = router;

@@ -1,7 +1,7 @@
 import { Document, Schema, model, Types } from "mongoose";
 
 export  interface FoodProductEntry {
-    foodProduct: Types.ObjectId; 
+    productid: Types.ObjectId; 
     quantity: number;
     addedAt: Date; 
 }
@@ -31,7 +31,7 @@ const mealSchema = new Schema<Meal>({
     mealType:{
     breakfast: {
         foodProducts: [{
-            foodProduct: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+            productid: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
             quantity: { type: Number, required: true },
             addedAt: { type: Date, default: Date.now },
         }],
@@ -39,7 +39,7 @@ const mealSchema = new Schema<Meal>({
     },
     lunch: {
         foodProducts: [{
-            foodProduct: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+            productid: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
             quantity: { type: Number, required: true },
             addedAt: { type: Date, default: Date.now },
         }],
@@ -47,7 +47,7 @@ const mealSchema = new Schema<Meal>({
     },
     dinner: {
         foodProducts: [{
-            foodProduct: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
+            productid: { type: Schema.Types.ObjectId, ref: "FoodProduct", required: true },
             quantity: { type: Number, required: true },
             addedAt: { type: Date, default: Date.now },
         }],

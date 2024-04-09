@@ -12,10 +12,10 @@ export const createJwtToken=(user:User)=>{
 }
 
 export const verifyToken=(req:Request,res:Response,next:NextFunction)=>{
-    console.log(req.cookies);
+    // console.log(req.cookies);
     let token=req.cookies.token;
     let decode=jwt.verify(token,secretKey);
-    console.log(decode);
+    // console.log(decode);
     if(decode){
         req.user=decode;
        return next();

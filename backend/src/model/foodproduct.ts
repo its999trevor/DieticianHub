@@ -15,4 +15,4 @@ const foodProductSchema = new Schema<FoodProduct>({
     carbs: { type: Number, required: true },
     protein: { type: Number, required: true }
 });
-export default model<FoodProduct>("foodProduct",foodProductSchema)
+export default model<FoodProduct>("FoodProduct",foodProductSchema)
