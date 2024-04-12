@@ -103,15 +103,6 @@ router.post("/:mealType",verifyToken, async (req, res) => {
             });
             await newDailyLog.save();
         }
-            
-               
-            
-                
-            
-
-        
-
-
         res.send(`Food products added to ${mealType} successfully`);
     } catch (error) {
         console.error(error);
@@ -121,12 +112,31 @@ router.post("/:mealType",verifyToken, async (req, res) => {
 
 router.get("/allmeals",verifyToken,async(req,res)=>{
     const userId=req.user._doc._id;
-    console.log(userId);
+    // console.log(userId);
     const currentDate = new Date().setHours(0, 0, 0, 0); 
     let data=await Meal.findOne({ userId, createdAt: { $gte: currentDate } }).populate("mealType.breakfast.foodProducts.productid")
     .populate("mealType.lunch.foodProducts.productid")
     .populate("mealType.dinner.foodProducts.productid");
     res.json(data);
 })
+router.get("/mealbydate", verifyToken, async (req, res) => {
+    try {
+        const userId = req.user._doc._id;
+        const dateParam = req.body.date as string; 
+        // console.log(dateParam)
+
+        const date = new Date(dateParam);
+
+        const data = await Meal.find({ userId, createdAt: { $gte: date, $lt: new Date(date.getTime() + 24 * 60 * 60 * 1000) } }).populate("mealType.breakfast.foodProducts.productid")
+            .populate("mealType.lunch.foodProducts.productid")
+            .populate("mealType.dinner.foodProducts.productid");
+
+        res.json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 export default router;

@@ -93,4 +93,20 @@ router.get("/allmeals", auth_1.verifyToken, (req, res) => __awaiter(void 0, void
         .populate("mealType.dinner.foodProducts.productid");
     res.json(data);
 }));
+router.get("/mealbydate", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.user._doc._id;
+        const dateParam = req.body.date;
+        console.log(dateParam);
+        const date = new Date(dateParam);
+        const data = yield meal_1.default.find({ userId, createdAt: { $gte: date, $lt: new Date(date.getTime() + 24 * 60 * 60 * 1000) } }).populate("mealType.breakfast.foodProducts.productid")
+            .populate("mealType.lunch.foodProducts.productid")
+            .populate("mealType.dinner.foodProducts.productid");
+        res.json(data);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
 exports.default = router;
