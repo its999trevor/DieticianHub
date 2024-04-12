@@ -75,18 +75,39 @@ router.post("/:mealType",verifyToken, async (req, res) => {
         
         
         await meal.save();
-            const existingLog = await dailylog.findOne({ userId, date: currentDate });
+         
+        const userDailyLog = await dailylog.findOne({ userId });
 
-            if (!existingLog) {
-               
-            
-                const newLog = new dailylog({
-                    userId,
-                    date: currentDate,
+        if (userDailyLog) {
+            const currentLog = userDailyLog.logs.find(log => log.date.getTime() === currentDate);
+        
+            if (currentLog) {
+                if (!currentLog.mealeaten.includes(meal._id)) {
+                    currentLog.mealeaten.push(meal._id);
+                }
+            } else {
+                userDailyLog.logs.push({
+                    date: new Date(currentDate),
                     mealeaten: [meal._id]
                 });
-                await newLog.save();
             }
+        
+            await userDailyLog.save();
+        } else {
+            const newDailyLog = new dailylog({
+                userId,
+                logs: [{
+                    date: new Date(currentDate),
+                    mealeaten: [meal._id]
+                }]
+            });
+            await newDailyLog.save();
+        }
+            
+               
+            
+                
+            
 
         
 

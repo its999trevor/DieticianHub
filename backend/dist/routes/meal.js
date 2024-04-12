@@ -51,14 +51,31 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
             }
         }
         yield meal.save();
-        const existingLog = yield dailylog_1.default.findOne({ userId, date: currentDate });
-        if (!existingLog) {
-            const newLog = new dailylog_1.default({
+        const userDailyLog = yield dailylog_1.default.findOne({ userId });
+        if (userDailyLog) {
+            const currentLog = userDailyLog.logs.find(log => log.date.getTime() === currentDate);
+            if (currentLog) {
+                if (!currentLog.mealeaten.includes(meal._id)) {
+                    currentLog.mealeaten.push(meal._id);
+                }
+            }
+            else {
+                userDailyLog.logs.push({
+                    date: new Date(currentDate),
+                    mealeaten: [meal._id]
+                });
+            }
+            yield userDailyLog.save();
+        }
+        else {
+            const newDailyLog = new dailylog_1.default({
                 userId,
-                date: currentDate,
-                mealeaten: [meal._id]
+                logs: [{
+                        date: new Date(currentDate),
+                        mealeaten: [meal._id]
+                    }]
             });
-            yield newLog.save();
+            yield newDailyLog.save();
         }
         res.send(`Food products added to ${mealType} successfully`);
     }
