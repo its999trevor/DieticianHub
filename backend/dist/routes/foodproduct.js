@@ -17,8 +17,8 @@ const foodproduct_1 = __importDefault(require("../model/foodproduct"));
 const router = express_1.default.Router();
 router.post("/add", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { name, calories, fats, fibers, carbs, protein } = req.body;
-        let newFood = new foodproduct_1.default({ name, calories, fats, fibers, carbs, protein });
+        let { name, calories, description, fats, fibers, carbs, protein } = req.body;
+        let newFood = new foodproduct_1.default({ name, calories, description, fats, fibers, carbs, protein });
         yield newFood.save();
         res.send("new foodproduct added");
     }

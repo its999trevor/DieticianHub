@@ -21,6 +21,7 @@ const user_1 = __importDefault(require("./routes/user"));
 const dbconfig_1 = __importDefault(require("./config/dbconfig"));
 const userprofile_1 = __importDefault(require("./routes/userprofile"));
 const foodproduct_1 = __importDefault(require("./routes/foodproduct"));
+const diet_1 = __importDefault(require("./routes/diet"));
 const meal_1 = __importDefault(require("./routes/meal"));
 const port = process.env.PORT || 8000;
 const app = (0, express_1.default)();
@@ -33,6 +34,7 @@ app.use("/", user_1.default);
 app.use("/user", userprofile_1.default);
 app.use("/food", foodproduct_1.default);
 app.use("/meal", meal_1.default);
+app.use("/diet", diet_1.default);
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, dbconfig_1.default)();
     console.log(`Server started at port:${port}`);

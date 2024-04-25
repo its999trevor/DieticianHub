@@ -7,6 +7,7 @@ import userlogin from "./routes/user"
 import connect from './config/dbconfig';
 import userprofile from './routes/userprofile';
 import foodproduct from './routes/foodproduct';
+import diet from './routes/diet';
 import meal from './routes/meal';
 const port=process.env.PORT || 8000;
 const app = express();
@@ -19,6 +20,7 @@ app.use("/",userlogin);
 app.use("/user",userprofile);
 app.use("/food",foodproduct);
 app.use("/meal",meal);
+app.use("/diet",diet);
 app.listen(port, async () => {
       await connect();
       console.log(`Server started at port:${port}`);

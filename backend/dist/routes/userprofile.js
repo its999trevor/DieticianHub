@@ -21,15 +21,44 @@ var Activity;
     Activity["moderate"] = "moderate";
     Activity["high"] = "high";
 })(Activity || (Activity = {}));
+var Gender;
+(function (Gender) {
+    Gender["male"] = "male";
+    Gender["female"] = "female";
+})(Gender || (Gender = {}));
 const router = express_1.default.Router();
 router.post("/", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { weight, height, age, activity } = req.body;
+        const { gender, weight, height, age, activity } = req.body;
         if (!(activity in Activity)) {
             throw new Error("Invalid activity value");
         }
         const userId = req.user._doc._id;
-        const newProfile = new userprofile_1.default({ userId, weight, height, age, activity });
+        let bmr;
+        if (!bmr) {
+            if (gender == Gender.male) {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            }
+            if (gender == Gender.female) {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+        }
+        if (bmr) {
+            if (activity == Activity.low) {
+                bmr = bmr * 1.375;
+            }
+            if (activity == Activity.moderate) {
+                bmr = bmr * 1.55;
+            }
+            if (activity == Activity.high) {
+                bmr = bmr * 1.725;
+            }
+            bmr = bmr.toFixed(2);
+        }
+        let heightinm = height / 100;
+        let bmi = weight / Math.pow(heightinm, 2);
+        bmi = parseFloat(bmi.toFixed(2));
+        const newProfile = new userprofile_1.default({ gender, userId, weight, height, age, activity, bmr, bmi });
         yield newProfile.save();
         res.send("UserProfile added");
     }
@@ -57,7 +86,8 @@ router.put("/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const userId = req.params.userId;
         const { weight, height, age, activity } = req.body;
-        const updatedProfile = yield userprofile_1.default.updateOne({ userId: userId }, { $set: { weight, height, age, activity } });
+        let bmi = weight / Math.pow(height, 2);
+        const updatedProfile = yield userprofile_1.default.updateOne({ userId: userId }, { $set: { weight, height, age, activity, bmi } });
         res.json({ message: "User profile updated successfully" });
     }
     catch (error) {

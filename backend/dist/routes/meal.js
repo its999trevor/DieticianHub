@@ -86,7 +86,7 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
 }));
 router.get("/allmeals", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.user._doc._id;
-    console.log(userId);
+    // console.log(userId);
     const currentDate = new Date().setHours(0, 0, 0, 0);
     let data = yield meal_1.default.findOne({ userId, createdAt: { $gte: currentDate } }).populate("mealType.breakfast.foodProducts.productid")
         .populate("mealType.lunch.foodProducts.productid")
@@ -97,7 +97,7 @@ router.get("/mealbydate", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
     try {
         const userId = req.user._doc._id;
         const dateParam = req.body.date;
-        console.log(dateParam);
+        // console.log(dateParam)
         const date = new Date(dateParam);
         const data = yield meal_1.default.find({ userId, createdAt: { $gte: date, $lt: new Date(date.getTime() + 24 * 60 * 60 * 1000) } }).populate("mealType.breakfast.foodProducts.productid")
             .populate("mealType.lunch.foodProducts.productid")

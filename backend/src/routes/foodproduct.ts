@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.post("/add",async(req,res)=>{
 try{
-    let {name,calories,fats,fibers,carbs,protein}=req.body;
-    let newFood=new foodproduct({name,calories,fats,fibers,carbs,protein});
+    let {name,calories,description,fats,fibers,carbs,protein}=req.body;
+    let newFood=new foodproduct({name,calories,description,fats,fibers,carbs,protein});
     await newFood.save();
     res.send("new foodproduct added");
 }
