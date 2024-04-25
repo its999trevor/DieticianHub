@@ -8,6 +8,22 @@ interface UserProfile extends Document {
     activity: string;
     bmr: number;
     bmi: number;
+    dietplan:dietplan;
+}
+interface food{
+    name:string,
+    description:string,
+    calories:number
+}
+interface dietplan{
+    
+        breakfast:[food]
+        ,
+        lunch:[food]
+        ,
+        dinner:[food],
+        
+    additionalTips:[string]
 }
 const userProfileSchema = new Schema<UserProfile>({
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -17,7 +33,23 @@ const userProfileSchema = new Schema<UserProfile>({
     age: { type: Number, required: true },
     activity: { type: String, enum:["low","moderate","high"], required: true },
     bmr: {type:Number},
-    bmi: {type:Number}
+    bmi: {type:Number},
+    dietplan:{
+        breakfast:[{
+            name:String,
+            description:String,
+            calories:Number
+        }],lunch:[{
+            name:String,
+            description:String,
+            calories:Number
+        }],dinner:[{
+            name:String,
+            description:String,
+            calories:Number
+        }],
+        additionalTips:[String]
+    }
     
     
 });

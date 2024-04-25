@@ -55,62 +55,50 @@ function runChat(data) {
             const result = yield chat.sendMessage(data);
             const response = result.response;
             console.log(response.text());
-            return response.text();
+            // Remove comments and other non-JSON syntax elements
+            const cleanedResponse = response.text()
+                .replace(/```json\n/g, '') // Remove ```json\n
+                .replace(/```/g, '') // Remove ```
+                .replace(/\n/g, '') // Remove new lines
+                .replace(/\\/g, ''); // Remove backslashes
+            // Parse the cleaned response as JSON
+            const parsedResponse = JSON.parse(cleanedResponse);
+            console.log(parsedResponse);
+            return parsedResponse;
         }
     });
 }
 const router = express_1.default.Router();
 router.get("/", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let meal_type = req.body.meal_type;
+    let meal_type = req.query.meal_type;
     const userId = req.user._doc._id;
-    let data = yield userprofile_1.default.findOne({ userId });
-    console.log(data);
     try {
         let data = yield userprofile_1.default.findOne({ userId });
-        console.log(data);
         if (data) {
-            let message = `give dietplan recommendation for ${meal_type} diet ${data} and return the data in json
-            dietplan{
-                breakfast{
-                    {
-                        "name",
-                        "description",
-                        "calories"
-                    }
-                },
-                lunch{
-                    {
-                        "name",
-                        "description",
-                        "calories"
-                    }
-                },
-                dinner{
-                    {
-                        "name",
-                        "description",
-                        "calories"
-                    }
-                }
-            },
-            additionalTips`;
-            let newdata = yield runChat(message);
-            console.log(newdata);
-            let message2 = `take each "name" key from ${newdata} and return it as a json response like
-              {
+            let message = `give dietplan recommendation for ${meal_type} diet ${data} 
+            for breakfast, lunch and dinner
+            provide name,description and calories and multiple options
+            and also provide additional tips and return the data as json format like
+            breakfast:[{
+                
                 name,
-                calories:number,
                 description,
-                fats:how much fats are in it numbers,
-                fibers:how much fibers are in it numbers,
-                carbs:how much carbs are in it numbers,
-                protein:how protien fats are in it numbers}
-            } 
+                calories
+            }],lunch:[{
+                name,
+                description,
+                calories
+            }],dinner:[{
+                name:,
+                description,
+                calories
+            }],
+            additionalTips
+        }
             `;
-            console.log(message2);
-            let newproddata = yield runChat(message2);
-            console.log(newproddata);
-            res.send(newdata);
+            let newdata = yield runChat(message);
+            const updatedProfile = yield userprofile_1.default.updateOne({ userId: userId }, { $set: { dietplan: newdata } });
+            res.json(newdata);
         }
         else {
             res.status(404).send("User profile data not found");

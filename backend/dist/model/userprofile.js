@@ -9,6 +9,22 @@ const userProfileSchema = new mongoose_1.Schema({
     age: { type: Number, required: true },
     activity: { type: String, enum: ["low", "moderate", "high"], required: true },
     bmr: { type: Number },
-    bmi: { type: Number }
+    bmi: { type: Number },
+    dietplan: {
+        breakfast: [{
+                name: String,
+                description: String,
+                calories: Number
+            }], lunch: [{
+                name: String,
+                description: String,
+                calories: Number
+            }], dinner: [{
+                name: String,
+                description: String,
+                calories: Number
+            }],
+        additionalTips: [String]
+    }
 });
 exports.default = (0, mongoose_1.model)("userProfile", userProfileSchema);
