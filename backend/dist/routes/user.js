@@ -19,11 +19,17 @@ const auth_1 = require("../utils/auth");
 const router = express_1.default.Router();
 const saltRounds = 10;
 router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password } = req.body;
-    let hashPassword = yield bcrypt_1.default.hash(password, saltRounds);
-    let newUser = new user_1.default({ name, email, password: hashPassword });
-    yield newUser.save();
-    res.send("new user added");
+    try {
+        const { name, email, password } = req.body;
+        let hashPassword = yield bcrypt_1.default.hash(password, saltRounds);
+        let newUser = new user_1.default({ name, email, password: hashPassword });
+        yield newUser.save();
+        res.send("new user added");
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
 }));
 router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -36,13 +42,11 @@ router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             let match = yield bcrypt_1.default.compare(password, newUser.password);
             if (match) {
                 let token = (0, auth_1.createJwtToken)(newUser);
-                // Example of setting a cookie in Express
                 res.cookie('token', token, {
                     httpOnly: true,
-                    secure: false, // Change to "true" in production for HTTPS
-                    sameSite: 'none', // Ensure secure cross-site cookie
-                    maxAge: 3600000, // Adjust as needed
-                    path: '/', // Adjust as needed
+                    secure: false,
+                    maxAge: 3600000,
+                    path: '/',
                 });
                 res.send("user logged in");
             }

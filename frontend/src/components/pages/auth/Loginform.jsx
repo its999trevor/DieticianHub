@@ -18,6 +18,7 @@ const Loginform = () => {
         e.preventDefault();
         try {
             const userData = await authService.login(email, password);
+           console.log(userData); 
             // console.log(userData);
             if (userData.status==200) {
                 // Navigate to home only if login was successful
@@ -40,7 +41,7 @@ const Loginform = () => {
                <form onSubmit={loginHandler}>
                    <Row>
                        <Col>
-                   <input required  onChange={(e)=>setEmail(e.target.value)} placeholder='email address'/>
+                   <input required  onChange={(e)=>setEmail(e.target.value)} type='email' placeholder='email address'/>
                    </Col>
                    </Row>
                    <Row>

@@ -4,7 +4,6 @@ const authService = {
   async login(email, password) {
     try {
       const response = await api.post('/login', { email, password });
-      
       return response;
     } catch (error) {
         // console.log(error.response)
@@ -15,9 +14,10 @@ const authService = {
   async signup(name, email, password) {
     try {
       const response = await api.post('/signup', { name, email, password });
-      return response.data;
+      // console.log(response);
+      return response;
     } catch (error) {
-      throw new Error(error.response.data);
+      throw new Error(error);
     }
   },
 
@@ -29,11 +29,21 @@ const authService = {
       throw new Error(error.response.data);
     }
   },
-  getToken() {
-    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
-    // console.log(token);
-    return token ? token.split('=')[1] : null;
-  },
+  async getToken() {
+    console.log('Document cookie:', document.cookie);
+    const cookies = document.cookie.split(';');
+    console.log('Split cookies:', cookies);
+    for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        console.log('Cookie:', name, value);
+        if (name === 'token') {
+            return value;
+        }
+    }
+    return null;
+}
+
+  
 
 };
 

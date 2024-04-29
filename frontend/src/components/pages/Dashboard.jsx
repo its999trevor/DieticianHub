@@ -1,8 +1,11 @@
 import React from 'react'
+import NavbarComponent from './NavbarComponent '
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div>
+    <NavbarComponent/>
+      Dashboard</div>
   )
 }
 

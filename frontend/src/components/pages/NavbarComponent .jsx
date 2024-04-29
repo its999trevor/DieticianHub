@@ -13,7 +13,10 @@ const NavbarComponent  = () => {
       <>
         <Navbar className="bg-body-tertiary" expand="lg">
         <Container className="d-flex justify-content-between"> {/* Use Bootstrap flex utilities */}
-          <Navbar.Brand>
+          <Navbar.Brand  onClick={()=>{
+                  navigate("/");
+
+            }} >
             <img
               alt=""
               src={img}

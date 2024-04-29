@@ -6,11 +6,17 @@ const router= express.Router();
 
 const saltRounds = 10;
 router.post("/signup",async(req,res)=>{
+    try{
         const{name,email,password}=req.body;
         let hashPassword=await bcrypt.hash(password,saltRounds);                
         let newUser=new user({name,email,password:hashPassword});
         await newUser.save();
         res.send("new user added");
+    }
+    catch(error){
+        console.error(error);
+        res.status(500).send(error);
+    }
 
 })
 router.post("/login",async (req,res) => {
@@ -25,13 +31,11 @@ router.post("/login",async (req,res) => {
     if(match){
     let token= createJwtToken(newUser); 
    
-      // Example of setting a cookie in Express
       res.cookie('token', token, {
         httpOnly: true,
-        secure: false, // Change to "true" in production for HTTPS
-        sameSite: 'none', // Ensure secure cross-site cookie
-        maxAge: 3600000, // Adjust as needed
-        path: '/', // Adjust as needed
+        secure: false, 
+        maxAge: 3600000, 
+        path: '/',
       });
     res.send("user logged in");
     }
