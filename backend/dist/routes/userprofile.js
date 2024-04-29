@@ -27,7 +27,7 @@ var Gender;
     Gender["female"] = "female";
 })(Gender || (Gender = {}));
 const router = express_1.default.Router();
-router.post("/", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/newuser", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { gender, weight, height, age, activity } = req.body;
         if (!(activity in Activity)) {

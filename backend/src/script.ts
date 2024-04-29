@@ -15,7 +15,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true, // Enable credentials (cookies, authorization headers) cross-origin
+}));
 app.use("/",userlogin);
 app.use("/user",userprofile);
 app.use("/food",foodproduct);

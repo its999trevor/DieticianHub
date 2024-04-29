@@ -14,21 +14,42 @@ router.post("/signup",async(req,res)=>{
 
 })
 router.post("/login",async (req,res) => {
+    try{
     const {email,password}=req.body;
     let newUser=await user.findOne({email});
     if(!newUser){
-        res.send("not a valid email")
-       throw new Error ("Not a valid email");
+        throw new Error("Invalid email");
     }
+    else{
    let match=await bcrypt.compare(password, newUser.password)
     if(match){
     let token= createJwtToken(newUser); 
-    res.cookie("token",token);
+   
+      // Example of setting a cookie in Express
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: false, // Change to "true" in production for HTTPS
+        sameSite: 'none', // Ensure secure cross-site cookie
+        maxAge: 3600000, // Adjust as needed
+        path: '/', // Adjust as needed
+      });
     res.send("user logged in");
     }
     else{
-        res.send("not a valid password")
+        throw new Error("Invalid password");
     }
+}
+}
+        catch(error:any){
+            if (error.message === "Invalid email") {
+                res.status(400).json({ error: "Invalid email" });
+            } else if (error.message === "Invalid password") {
+                res.status(400).json({ error: "Invalid password" });
+            } else {
+                console.error(error);
+                res.status(500).send("Internal Server Error");
+            }
+        }
 })
 
 router.get("/logout",(req,res)=>{

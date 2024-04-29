@@ -15,7 +15,7 @@ enum Gender{
 
 const router = express.Router();
 
-router.post("/",verifyToken, async (req, res) => {
+router.post("/newuser",verifyToken, async (req, res) => {
     try {
         const {gender, weight, height, age, activity } = req.body;
         if (!(activity in Activity)) {

@@ -55,13 +55,11 @@ function runChat(data) {
             const result = yield chat.sendMessage(data);
             const response = result.response;
             console.log(response.text());
-            // Remove comments and other non-JSON syntax elements
             const cleanedResponse = response.text()
-                .replace(/```json\n/g, '') // Remove ```json\n
-                .replace(/```/g, '') // Remove ```
-                .replace(/\n/g, '') // Remove new lines
-                .replace(/\\/g, ''); // Remove backslashes
-            // Parse the cleaned response as JSON
+                .replace(/```json\n/g, '')
+                .replace(/```/g, '')
+                .replace(/\n/g, '')
+                .replace(/\\/g, '');
             const parsedResponse = JSON.parse(cleanedResponse);
             console.log(parsedResponse);
             return parsedResponse;

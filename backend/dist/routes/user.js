@@ -26,20 +26,42 @@ router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function*
     res.send("new user added");
 }));
 router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
-    let newUser = yield user_1.default.findOne({ email });
-    if (!newUser) {
-        res.send("not a valid email");
-        throw new Error("Not a valid email");
+    try {
+        const { email, password } = req.body;
+        let newUser = yield user_1.default.findOne({ email });
+        if (!newUser) {
+            throw new Error("Invalid email");
+        }
+        else {
+            let match = yield bcrypt_1.default.compare(password, newUser.password);
+            if (match) {
+                let token = (0, auth_1.createJwtToken)(newUser);
+                // Example of setting a cookie in Express
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: false, // Change to "true" in production for HTTPS
+                    sameSite: 'none', // Ensure secure cross-site cookie
+                    maxAge: 3600000, // Adjust as needed
+                    path: '/', // Adjust as needed
+                });
+                res.send("user logged in");
+            }
+            else {
+                throw new Error("Invalid password");
+            }
+        }
     }
-    let match = yield bcrypt_1.default.compare(password, newUser.password);
-    if (match) {
-        let token = (0, auth_1.createJwtToken)(newUser);
-        res.cookie("token", token);
-        res.send("user logged in");
-    }
-    else {
-        res.send("not a valid password");
+    catch (error) {
+        if (error.message === "Invalid email") {
+            res.status(400).json({ error: "Invalid email" });
+        }
+        else if (error.message === "Invalid password") {
+            res.status(400).json({ error: "Invalid password" });
+        }
+        else {
+            console.error(error);
+            res.status(500).send("Internal Server Error");
+        }
     }
 }));
 router.get("/logout", (req, res) => {
