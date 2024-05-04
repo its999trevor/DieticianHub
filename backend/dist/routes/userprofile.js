@@ -27,13 +27,13 @@ var Gender;
     Gender["female"] = "female";
 })(Gender || (Gender = {}));
 const router = express_1.default.Router();
-router.post("/newuser", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/newuser/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { gender, weight, height, age, activity } = req.body;
         if (!(activity in Activity)) {
             throw new Error("Invalid activity value");
         }
-        const userId = req.user._doc._id;
+        const userId = req.params.userId;
         let bmr;
         if (!bmr) {
             if (gender == Gender.male) {

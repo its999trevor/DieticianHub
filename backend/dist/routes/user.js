@@ -24,7 +24,7 @@ router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function*
         let hashPassword = yield bcrypt_1.default.hash(password, saltRounds);
         let newUser = new user_1.default({ name, email, password: hashPassword });
         yield newUser.save();
-        res.send("new user added");
+        res.status(200).json({ message: "New user added", userId: newUser._id });
     }
     catch (error) {
         console.error(error);

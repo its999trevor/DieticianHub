@@ -11,7 +11,7 @@ router.post("/signup",async(req,res)=>{
         let hashPassword=await bcrypt.hash(password,saltRounds);                
         let newUser=new user({name,email,password:hashPassword});
         await newUser.save();
-        res.send("new user added");
+        res.status(200).json({ message: "New user added", userId: newUser._id });
     }
     catch(error){
         console.error(error);

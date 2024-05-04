@@ -17,9 +17,10 @@ const Signupform = () => {
     e.preventDefault();
 try{
       const data=await authService.signup(name,email,password);
-      console.log(data);
+      
       if (data.status==200) {
-        navigate('/home');
+        let userId=data.data.userId;
+        navigate('/gender',{ state: {userId} });
       } 
 }
 catch(error){

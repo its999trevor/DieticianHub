@@ -1,14 +1,17 @@
 import React from 'react'
-import {Routes,Route} from 'react-router-dom'
+import {Routes,Route,Navigate,useNavigate } from 'react-router-dom'
 import Homepage from './pages/Homepage'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
-import authService from './api/services/authservice';
+import Profileform from './pages/userProfile/Profileform'
+import Weight from './pages/userProfile/Weight'
+import Height from './pages/userProfile/Height'
+import Age from './pages/userProfile/Age'
+import Activity from './pages/userProfile/Activity'
+import Profile from './pages/Profile'
 
 const Allroutes = () => {
-  const isAuthenticated = authService.getToken() !== null;
-  console.log(isAuthenticated);
 
   return (
     <div>
@@ -16,12 +19,13 @@ const Allroutes = () => {
             <Route path="/" element={<Homepage/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<Signup/>}/>
-            {isAuthenticated ? (
           <Route path="/home" element={<Dashboard />} />
-        ) : (
-          // Redirect to login if the user is not authenticated
-          <Route path="/home" element={<Navigate to="/login" />} />
-        )}
+          <Route path="/gender" element={<Profileform />} />
+          <Route path="/weight" element={<Weight />} />
+          <Route path="/height" element={<Height />} />
+          <Route path="/age" element={<Age/>} />
+          <Route path="/activity" element={<Activity/>} />
+          
         </Routes>
     </div>
   )

@@ -29,19 +29,7 @@ const authService = {
       throw new Error(error.response.data);
     }
   },
-  async getToken() {
-    console.log('Document cookie:', document.cookie);
-    const cookies = document.cookie.split(';');
-    console.log('Split cookies:', cookies);
-    for (let cookie of cookies) {
-        const [name, value] = cookie.trim().split('=');
-        console.log('Cookie:', name, value);
-        if (name === 'token') {
-            return value;
-        }
-    }
-    return null;
-}
+
 
   
 
