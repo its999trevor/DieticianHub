@@ -1,4 +1,6 @@
 import api from '../api';
+import React, { useState } from 'react';
+
 
 const authService = {
   async login(email, password) {
@@ -29,10 +31,9 @@ const authService = {
       throw new Error(error.response.data);
     }
   },
-
-
   
-
+  
+  
+  
 };
-
 export default authService;

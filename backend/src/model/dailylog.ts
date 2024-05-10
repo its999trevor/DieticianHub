@@ -14,6 +14,7 @@ const dailyLogSchema = new Schema<DailyLog>({
         {
             date: { type: Date, required: true },
             mealeaten: [{ type: Schema.Types.ObjectId, ref: "Meal", required: true }]
+            
         }
     ]
 });

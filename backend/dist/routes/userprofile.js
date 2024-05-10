@@ -53,7 +53,7 @@ router.post("/newuser/:userId", (req, res) => __awaiter(void 0, void 0, void 0, 
             if (activity == Activity.high) {
                 bmr = bmr * 1.725;
             }
-            bmr = bmr.toFixed(2);
+            bmr = bmr.toFixed(0);
         }
         let heightinm = height / 100;
         let bmi = weight / Math.pow(heightinm, 2);
@@ -67,7 +67,7 @@ router.post("/newuser/:userId", (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(400).send(error);
     }
 }));
-router.get("/:userId", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/profile/:userId", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.params.userId;
         // console.log(userId);
@@ -82,12 +82,50 @@ router.get("/:userId", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 
         res.status(500).send("Internal Server Error");
     }
 }));
-router.put("/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/userdata", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = req.user._doc._id;
+        console.log(userId);
+        const profile = yield userprofile_1.default.findOne({ userId });
+        if (!profile) {
+            return res.status(404).send("User profile not found");
+        }
+        res.json(profile);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+}));
+router.put("/updateuser/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.params.userId;
-        const { weight, height, age, activity } = req.body;
-        let bmi = weight / Math.pow(height, 2);
-        const updatedProfile = yield userprofile_1.default.updateOne({ userId: userId }, { $set: { weight, height, age, activity, bmi } });
+        const { gender, weight, height, age, activity } = req.body;
+        let bmr;
+        if (!bmr) {
+            if (gender == Gender.male) {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            }
+            if (gender == Gender.female) {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+        }
+        if (bmr) {
+            if (activity == Activity.low) {
+                bmr = bmr * 1.375;
+            }
+            if (activity == Activity.moderate) {
+                bmr = bmr * 1.55;
+            }
+            if (activity == Activity.high) {
+                bmr = bmr * 1.725;
+            }
+            bmr = bmr.toFixed(0);
+        }
+        let heightinm = height / 100;
+        let bmi = weight / Math.pow(heightinm, 2);
+        bmi = parseFloat(bmi.toFixed(2));
+        const updatedProfile = yield userprofile_1.default.updateOne({ userId: userId }, { $set: { weight, height, age, activity, bmr, bmi } });
         res.json({ message: "User profile updated successfully" });
     }
     catch (error) {

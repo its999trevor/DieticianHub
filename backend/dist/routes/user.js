@@ -44,7 +44,7 @@ router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 let token = (0, auth_1.createJwtToken)(newUser);
                 res.cookie('token', token, {
                     httpOnly: true,
-                    secure: false,
+                    secure: true,
                     maxAge: 3600000,
                     path: '/',
                 });

@@ -11,7 +11,7 @@ const Activity = () => {
         try {
           let data=await userProfileService.postUserProfile(userId,gender, weight, height, age, activity);
           console.log(data);
-          alert('Profile submitted successfully!');
+          navigate('/login')
         } catch (error) {
           alert('Error submitting profile: ' + error.message);
         }

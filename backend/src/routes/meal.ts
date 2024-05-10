@@ -3,7 +3,8 @@ import Meal from "../model/meal";
 import FoodProduct from "../model/foodproduct";
 import { verifyToken } from "../utils/auth";
 import dailylog from "../model/dailylog";
-import user from "../model/user";
+import userProfile from "../model/userprofile";
+
 
 
 const router = express.Router();
@@ -118,6 +119,69 @@ router.get("/allmeals",verifyToken,async(req,res)=>{
     .populate("mealType.lunch.foodProducts.productid")
     .populate("mealType.dinner.foodProducts.productid");
     res.json(data);
+})
+router.get("/mealdata",verifyToken,async(req,res)=>{
+    try{
+    const userId=req.user._doc._id;
+    // console.log(userId);
+    const currentDate = new Date().setHours(0, 0, 0, 0); 
+    let data = await Meal.findOne({ userId, createdAt: { $gte: currentDate } })
+    .populate({
+        path: "mealType.breakfast.foodProducts.productid",
+        model: "FoodProduct"
+    })
+    .populate({
+        path: "mealType.lunch.foodProducts.productid",
+        model: "FoodProduct"
+    })
+    .populate({
+        path: "mealType.dinner.foodProducts.productid",
+        model: "FoodProduct"
+    });
+    let TotalProtein = 0;
+    let TotalFats = 0;
+    let TotalFiber = 0;
+    let TotalCarbs = 0;
+    let calorieseaten = 0;
+    if (data) {
+        calorieseaten = data.totalCalories || 0;
+        for (const mealTypeKey of Object.keys(data.mealType) as (keyof typeof data.mealType)[]) {
+            const mealType = data.mealType[mealTypeKey];
+            
+            mealType.foodProducts.forEach(foodProduct => {
+                const product = foodProduct.productid;
+                
+                if (typeof product === 'object' && product !== null) {
+                    TotalProtein += (product as any).protein * foodProduct.quantity;
+                    TotalFats += (product as any).fats * foodProduct.quantity;
+                    TotalFiber += (product as any).fibers * foodProduct.quantity;
+                    TotalCarbs += (product as any).carbs * foodProduct.quantity;
+                }
+                
+            });
+        }
+        
+        const userProfileData = await userProfile.findOne({ userId });
+        let userBMR; 
+        if (userProfileData) {
+            userBMR = userProfileData.bmr || 0;
+        }
+    
+
+    // Send the calculated totals as a response
+    res.json({
+        TotalProtein,
+        TotalFats,
+        TotalFiber,
+        TotalCarbs,
+        calorieseaten,
+        userBMR
+    });
+}
+} catch (error) {
+    console.error("Error fetching meal data:", error);
+    res.status(500).json({ error: "Internal server error" });
+}
 })
 router.get("/mealbydate", verifyToken, async (req, res) => {
     try {
