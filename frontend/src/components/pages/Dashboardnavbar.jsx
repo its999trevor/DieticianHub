@@ -1,5 +1,6 @@
 import React from 'react'
 import logo from "../../assets/logo.png"
+import {BrowserRouter,Routes,Route, useNavigate,Link} from 'react-router-dom'
 
 
 const Dashboardnavbar = () => {
@@ -44,8 +45,8 @@ const Dashboardnavbar = () => {
               /></div>
               <div className='linkgroup'>
 
-            <div className='link'>Home</div>
-            <div  className='link'>Diary</div>
+            <div className='link'><Link to="/home">Home</Link></div>
+            <div  className='link'><Link to="/diary">Diary</Link></div>
             <div  className='link'>Diet Plan</div>
               </div>
             

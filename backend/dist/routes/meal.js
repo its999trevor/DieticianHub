@@ -55,15 +55,10 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
         const userDailyLog = yield dailylog_1.default.findOne({ userId });
         if (userDailyLog) {
             const currentLog = userDailyLog.logs.find(log => log.date.getTime() === currentDate);
-            if (currentLog) {
-                if (!currentLog.mealeaten.includes(meal._id)) {
-                    currentLog.mealeaten.push(meal._id);
-                }
-            }
-            else {
+            if (!currentLog) {
                 userDailyLog.logs.push({
                     date: new Date(currentDate),
-                    mealeaten: [meal._id]
+                    mealeaten: meal._id
                 });
             }
             yield userDailyLog.save();
@@ -73,7 +68,7 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
                 userId,
                 logs: [{
                         date: new Date(currentDate),
-                        mealeaten: [meal._id]
+                        mealeaten: meal._id
                     }]
             });
             yield newDailyLog.save();
@@ -133,8 +128,10 @@ router.get("/mealdata", auth_1.verifyToken, (req, res) => __awaiter(void 0, void
             }
             const userProfileData = yield userprofile_1.default.findOne({ userId });
             let userBMR;
+            let userBMI;
             if (userProfileData) {
                 userBMR = userProfileData.bmr || 0;
+                userBMI = userProfileData.bmi || 0;
             }
             // Send the calculated totals as a response
             res.json({
@@ -143,7 +140,8 @@ router.get("/mealdata", auth_1.verifyToken, (req, res) => __awaiter(void 0, void
                 TotalFiber,
                 TotalCarbs,
                 calorieseaten,
-                userBMR
+                userBMR,
+                userBMI
             });
         }
     }

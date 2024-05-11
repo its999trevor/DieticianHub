@@ -10,6 +10,7 @@ import Height from './pages/userProfile/Height'
 import Age from './pages/userProfile/Age'
 import Activity from './pages/userProfile/Activity'
 import Profile from './pages/Profile'
+import Diary from './pages/Diary'
 
 const Allroutes = () => {
 
@@ -25,6 +26,7 @@ const Allroutes = () => {
           <Route path="/height" element={<Height />} />
           <Route path="/age" element={<Age/>} />
           <Route path="/activity" element={<Activity/>} />
+          <Route path="/diary" element={<Diary/>} />
           
         </Routes>
     </div>

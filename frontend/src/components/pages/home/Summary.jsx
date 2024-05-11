@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Gauge } from '@mui/x-charts/Gauge';
 import "./summary.css"
 import mealService from '../../api/services/mealservice';
+import userProfileService from '../../api/services/userprofile';
 const Summary = () => {
   let [cals,setCals]=useState(null);
   let [calseaten,setCalseaten]=useState(0);
@@ -15,8 +16,10 @@ const Summary = () => {
     },[cals,calseaten])
     async function fetchdata(){
       let data=await mealService.getData();
+      let userData=await userProfileService.getUserProfiledata();
+
          // console.log(typeof(data.userBMR));
-          setCals(data.userBMR);
+          setCals(userData.bmr);
           setCalseaten(data.calorieseaten);
           setRemaining(cals-calseaten);
    }

@@ -82,14 +82,11 @@ router.post("/:mealType",verifyToken, async (req, res) => {
         if (userDailyLog) {
             const currentLog = userDailyLog.logs.find(log => log.date.getTime() === currentDate);
         
-            if (currentLog) {
-                if (!currentLog.mealeaten.includes(meal._id)) {
-                    currentLog.mealeaten.push(meal._id);
-                }
-            } else {
+            if (!currentLog) {
+               
                 userDailyLog.logs.push({
                     date: new Date(currentDate),
-                    mealeaten: [meal._id]
+                    mealeaten: meal._id
                 });
             }
         
@@ -99,7 +96,7 @@ router.post("/:mealType",verifyToken, async (req, res) => {
                 userId,
                 logs: [{
                     date: new Date(currentDate),
-                    mealeaten: [meal._id]
+                    mealeaten: meal._id
                 }]
             });
             await newDailyLog.save();
@@ -163,8 +160,10 @@ router.get("/mealdata",verifyToken,async(req,res)=>{
         
         const userProfileData = await userProfile.findOne({ userId });
         let userBMR; 
+        let userBMI;
         if (userProfileData) {
             userBMR = userProfileData.bmr || 0;
+            userBMI = userProfileData.bmi || 0;
         }
     
 
@@ -175,7 +174,8 @@ router.get("/mealdata",verifyToken,async(req,res)=>{
         TotalFiber,
         TotalCarbs,
         calorieseaten,
-        userBMR
+        userBMR,
+        userBMI
     });
 }
 } catch (error) {

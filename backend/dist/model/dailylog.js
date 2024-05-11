@@ -6,7 +6,7 @@ const dailyLogSchema = new mongoose_1.Schema({
     logs: [
         {
             date: { type: Date, required: true },
-            mealeaten: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Meal", required: true }]
+            mealeaten: { type: mongoose_1.Schema.Types.ObjectId, ref: "Meal", required: true }
         }
     ]
 });

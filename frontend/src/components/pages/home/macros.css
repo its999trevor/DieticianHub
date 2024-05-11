@@ -23,8 +23,16 @@
     position: absolute;
 }
 .bar{
-    position: relative;
-    top:10px;
+   
     padding-left:20px;
+    position:absolute;
     
+}
+.macinfo{
+    position: relative;
+    bottom:28px;
+    
+    left:61px;
+    display: inline-block;
+    padding-right:19px;
 }

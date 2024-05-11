@@ -1,8 +1,8 @@
 import api from '../api';
-const mealService={
+const logs={
    async getData(){
         try{ 
-          const response=await api.get(`/meal/mealdata`);
+          const response=await api.get(`/log/`);
       //   console.log(response.data);
         return response.data;
    }
@@ -12,4 +12,4 @@ const mealService={
    }
 } 
 }
-export default mealService
+export default logs

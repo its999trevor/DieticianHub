@@ -29,7 +29,8 @@ const Macros = () => {
     },[])
     async function fetchdata(){
       let userdata=await mealService.getData();
-         // console.log(typeof(data.userBMR));
+        //  console.log(typeof(data.userBMR));
+         console.log(data);
 
          setData([
           { value: userdata.TotalProtein, label: 'Protien' },
@@ -79,7 +80,6 @@ const Macros = () => {
         <div className='container macronut'>
         <div className='title' >MACROS TARGET</div>
         <div className=' bar'>
-
         <BarChart
       series={[{ data: [protien, fats, fiber, carbs] }]}
       xAxis={[{ scaleType: 'band', data: ['Protien', 'Fats', 'Fiber', 'Carbs'] }]}
@@ -87,6 +87,7 @@ const Macros = () => {
       width={350}
       leftAxis={null}
       />
+      <div className='macinfo'>{protien}gm</div> <div className='macinfo'>{fats}gm</div> <div className='macinfo'>{fiber}gm</div> <div className='macinfo'>{carbs}gm</div>
       </div>
         </div>
     </div>

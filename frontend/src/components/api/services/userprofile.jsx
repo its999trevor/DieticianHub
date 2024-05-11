@@ -18,6 +18,14 @@ const userProfileService = {
           throw new Error(error.response.data);
         }
       },
+      async getUserProfiledata(userId) {
+        try {
+          const response = await api.get(`/user/userdata`);
+          return response.data;
+        } catch (error) {
+          throw new Error(error.response.data);
+        }
+      },
 
 }
 export default userProfileService;

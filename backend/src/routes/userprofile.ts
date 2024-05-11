@@ -77,7 +77,7 @@ catch (error) {
 router.get("/userdata",verifyToken,async (req,res) => {
    try{
     const userId=req.user._doc._id;
-    console.log(userId);
+    // console.log(userId);
     const profile = await userProfile.findOne({ userId});
     if (!profile) {
         return res.status(404).send("User profile not found");

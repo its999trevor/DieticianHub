@@ -4,7 +4,7 @@ interface DailyLog extends Document {
     userId: Schema.Types.ObjectId;
     logs: {
         date: Date;
-        mealeaten: Schema.Types.ObjectId[];
+        mealeaten: Schema.Types.ObjectId;
     }[];
 }
 
@@ -13,7 +13,7 @@ const dailyLogSchema = new Schema<DailyLog>({
     logs: [
         {
             date: { type: Date, required: true },
-            mealeaten: [{ type: Schema.Types.ObjectId, ref: "Meal", required: true }]
+            mealeaten: { type: Schema.Types.ObjectId, ref: "Meal", required: true }
             
         }
     ]
