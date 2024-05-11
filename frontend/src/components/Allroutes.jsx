@@ -11,6 +11,7 @@ import Age from './pages/userProfile/Age'
 import Activity from './pages/userProfile/Activity'
 import Profile from './pages/Profile'
 import Diary from './pages/Diary'
+import Addfood from './pages/food/Addfood'
 
 const Allroutes = () => {
 
@@ -27,6 +28,7 @@ const Allroutes = () => {
           <Route path="/age" element={<Age/>} />
           <Route path="/activity" element={<Activity/>} />
           <Route path="/diary" element={<Diary/>} />
+          <Route path="/add/:mealtype" element={<Addfood/>} />
           
         </Routes>
     </div>

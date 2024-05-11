@@ -12,10 +12,10 @@ try{
 catch(err){
     res.status(500).send(err);
 }
-})
-router.get("/showitem",async(req,res)=>{
-    try{
-        const name = req.body.name;
+    })
+    router.get("/showitem",async(req,res)=>{
+        try{
+            const {name} = req.query;
         const regexPattern = new RegExp(`^${name}`, 'i');
         
         const newData = await foodproduct.find({ name: regexPattern });

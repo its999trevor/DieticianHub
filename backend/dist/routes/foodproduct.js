@@ -28,7 +28,7 @@ router.post("/add", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 }));
 router.get("/showitem", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const name = req.body.name;
+        const { name } = req.query;
         const regexPattern = new RegExp(`^${name}`, 'i');
         const newData = yield foodproduct_1.default.find({ name: regexPattern });
         res.json(newData);

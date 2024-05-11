@@ -24,6 +24,10 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
         const { foodProducts } = req.body;
         const userId = req.user._doc._id;
         const mealType = req.params.mealType.toLowerCase();
+        console.log(foodProducts);
+        if (!Array.isArray(foodProducts)) {
+            return res.status(400).json({ error: 'Invalid foodProducts data' });
+        }
         const currentDate = new Date().setHours(0, 0, 0, 0);
         let meal = yield meal_1.default.findOne({ userId, createdAt: { $gte: currentDate } });
         if (!meal) {
@@ -73,7 +77,7 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
             });
             yield newDailyLog.save();
         }
-        res.send(`Food products added to ${mealType} successfully`);
+        res.status(200).json({ message: `Food products added to ${mealType} successfully` });
     }
     catch (error) {
         console.error(error);

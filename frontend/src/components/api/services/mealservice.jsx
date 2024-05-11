@@ -10,6 +10,19 @@ const mealService={
     throw new Error(error);
 
    }
+},
+async postMeal(mealType,foodProducts){
+   try{ 
+      console.log(mealType);
+      const response=await api.post(`/meal/${mealType}`,{foodProducts});
+    console.log(response.data);
+    return response.data;
+}
+catch(error){
+throw new Error(error);
+
+}
+
 } 
 }
 export default mealService

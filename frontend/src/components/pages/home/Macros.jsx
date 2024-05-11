@@ -33,15 +33,15 @@ const Macros = () => {
          console.log(data);
 
          setData([
-          { value: userdata.TotalProtein, label: 'Protien' },
-          { value: userdata.TotalFats, label: 'Fats' },
-          { value:  userdata.TotalFiber, label: 'Fiber' },
-          { value:userdata.TotalCarbs, label: 'Carbs' },
+          { value: userdata.TotalProtein.toFixed(2), label: 'Protien' },
+          { value: userdata.TotalFats.toFixed(2), label: 'Fats' },
+          { value:  userdata.TotalFiber.toFixed(2), label: 'Fiber' },
+          { value:userdata.TotalCarbs.toFixed(2), label: 'Carbs' },
         ])
-        setProtien(userdata.TotalProtein)
-        setFats(userdata.TotalFats)
-          setFiber( userdata.TotalFiber)
-          setCarbs(userdata.TotalCarbs)
+        setProtien(userdata.TotalProtein.toFixed(2))
+        setFats(userdata.TotalFats.toFixed(2))
+          setFiber( userdata.TotalFiber.toFixed(2))
+          setCarbs(userdata.TotalCarbs.toFixed(2))
       
         
          

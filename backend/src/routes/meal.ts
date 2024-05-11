@@ -41,7 +41,10 @@ router.post("/:mealType",verifyToken, async (req, res) => {
         const { foodProducts } = req.body;
         const userId=req.user._doc._id;
         const mealType = req.params.mealType.toLowerCase() as keyof MealType;
-
+        console.log(foodProducts);
+        if (!Array.isArray(foodProducts)) {
+            return res.status(400).json({ error: 'Invalid foodProducts data' });
+        }
         const currentDate = new Date().setHours(0, 0, 0, 0); 
 
         let meal = await Meal.findOne({ userId, createdAt: { $gte: currentDate } });
@@ -101,7 +104,8 @@ router.post("/:mealType",verifyToken, async (req, res) => {
             });
             await newDailyLog.save();
         }
-        res.send(`Food products added to ${mealType} successfully`);
+        res.status(200).json({ message:`Food products added to ${mealType} successfully` });
+        
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
@@ -117,6 +121,12 @@ router.get("/allmeals",verifyToken,async(req,res)=>{
     .populate("mealType.dinner.foodProducts.productid");
     res.json(data);
 })
+
+
+
+
+
+
 router.get("/mealdata",verifyToken,async(req,res)=>{
     try{
     const userId=req.user._doc._id;
