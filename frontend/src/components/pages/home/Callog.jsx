@@ -7,26 +7,27 @@ const Callog = () => {
 
   useEffect(() => {
     fetchdata();
-  }, []);
+  }, [chartData]);
 
   async function fetchdata() {
     try {
       const userData = await logs.getData();
       const logData = userData[0].logs;
-
+      // console.log(logData)
       // Prepare data for LineChart
       const chartDataArray = logData.map(log => ({
         date: new Date(log.date),
-        totalCalories: log.mealeaten.totalCalories,
+        totalCalories: log.mealeaten ? log.mealeaten.totalCalories : 0, // Check if log.mealeaten is not null
       }));
-
+  
       setChartData(chartDataArray);
     } catch (error) {
       console.error('Error fetching log data:', error);
     }
   }
+  
 
-  console.log('ChartData:', chartData);
+  // console.log('ChartData:', chartData);
 
   return (
     <div className='container prog'>

@@ -23,6 +23,18 @@ throw new Error(error);
 
 }
 
+},
+async getmealbyDate(date){
+   try {
+      //   console.log(date);
+      const response = await api.get(`/meal/mealbydate`, { params: { date } });
+      // console.log('Response Data:', response.data);
+  
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      throw new Error(error);
+  }
 } 
 }
 export default mealService

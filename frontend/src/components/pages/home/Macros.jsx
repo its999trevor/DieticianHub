@@ -30,7 +30,7 @@ const Macros = () => {
     async function fetchdata(){
       let userdata=await mealService.getData();
         //  console.log(typeof(data.userBMR));
-         console.log(data);
+        //  console.log(data);
 
          setData([
           { value: userdata.TotalProtein.toFixed(2), label: 'Protien' },

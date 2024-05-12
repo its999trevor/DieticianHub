@@ -157,7 +157,7 @@ router.get("/mealdata", auth_1.verifyToken, (req, res) => __awaiter(void 0, void
 router.get("/mealbydate", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = req.user._doc._id;
-        const dateParam = req.body.date;
+        const dateParam = req.query.date;
         // console.log(dateParam)
         const date = new Date(dateParam);
         const data = yield meal_1.default.find({ userId, createdAt: { $gte: date, $lt: new Date(date.getTime() + 24 * 60 * 60 * 1000) } }).populate("mealType.breakfast.foodProducts.productid")

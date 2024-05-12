@@ -196,7 +196,7 @@ router.get("/mealdata",verifyToken,async(req,res)=>{
 router.get("/mealbydate", verifyToken, async (req, res) => {
     try {
         const userId = req.user._doc._id;
-        const dateParam = req.body.date as string; 
+        const dateParam = req.query.date as string; 
         // console.log(dateParam)
 
         const date = new Date(dateParam);
