@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Dashboardnavbar from './Dashboardnavbar';
 import userProfileService from '../api/services/userprofile';
+import GenerateDiet from './GenerateDiet';
 
 const DietPlan = () => {
-  const [selectedDiet, setSelectedDiet] = useState('');
   const [dietPlan, setDietPlan] = useState(null);
   const [selectedMeals, setSelectedMeals] = useState({
     breakfast: '',
@@ -11,9 +11,7 @@ const DietPlan = () => {
     dinner: ''
   });
 
-  const handleDietChange = (e) => {
-    setSelectedDiet(e.target.value);
-  };
+ 
 
   useEffect(() => {
     getPlan();
@@ -22,7 +20,7 @@ const DietPlan = () => {
   async function getPlan() {
     try {
       const data = await userProfileService.getUserProfiledata();
-      console.log(data);
+      // console.log(data);
       if (data && data.dietplan) {
         setDietPlan(data.dietplan);
       }
@@ -41,19 +39,7 @@ const DietPlan = () => {
   return (
     <div>
       <Dashboardnavbar />
-      <div className="diet-plan-container">
-        <h2>Select Your Diet Plan</h2>
-        <select value={selectedDiet} onChange={handleDietChange}>
-          <option value="">Select Diet Plan</option>
-          <option value="veg">Vegetarian</option>
-          <option value="Indian veg">Indian veg</option>
-          <option value="Indian nonveg">Indian non-veg</option>
-          <option value="non-veg">Non-Vegetarian</option>
-          <option value="pescetarian">Pescetarian</option>
-          <option value="vegan">Vegan</option>
-        </select>
-      </div>
-      <button>Generate</button>
+        <GenerateDiet/>
 
       {dietPlan && (
         <div className="diet-plan-list">

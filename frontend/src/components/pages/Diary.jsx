@@ -11,6 +11,7 @@ import mealService from '../api/services/mealservice';
 const Diary = () => {
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [mealData, setMealData] = useState([]);
+    const [calsate,setCalsate]=useState(0);
     const [macros, setMacros] = useState({
         breakfast: {
             carbs: 0,
@@ -49,6 +50,8 @@ useEffect(() => {
 useEffect(() => {
     macrosdata();
 }, [selectedDate]);
+
+
 async function deleteproductfrommeal(id,type,date){
     try{
     const data=await mealService.deletemeal(id,type,date);
@@ -64,7 +67,7 @@ async function macrosdata(){
     try{
         let userdata=await mealService.getData();
         // console.log(data)
-        console.log(userdata)
+        // console.log(userdata)
         setUsersdata(userdata);
 
 
@@ -75,7 +78,8 @@ async function getData() {
     try {
         let data = await mealService.getmealbyDate(selectedDate.format('MM-DD-YYYY'));
         setMealData(data);
-        // console.log(data)
+
+        console.log(data)
         if(data[0]!=null){
         const newMacros = {
             breakfast: calculateMacros(data[0].mealType.breakfast),
@@ -83,6 +87,16 @@ async function getData() {
             dinner: calculateMacros(data[0].mealType.dinner)
         };
         
+        setCalsate(data[0].totalCalories);
+        setMacros(newMacros);
+    }
+    else{
+        setCalsate(0);
+        const newMacros = {
+            breakfast: 0,
+            lunch: 0,
+            dinner: 0
+        };
         setMacros(newMacros);
     }
     
@@ -139,16 +153,39 @@ async function getData() {
       </div>
                <table>
                 <tbody>
+                    <tr>
+           <th>Breakfast</th>
+           <td>calories</td>
+           <td>carbs</td>
+           <td>fat</td>
+           <td>Protein</td>
+           
+       </tr>
+       {mealData.length === 0 && (
+        <>
+            <tr>
+        <th>
+        <Link to="/add/breakfast">Add breakfast</Link>
+        </th>
+        </tr>
+        <tr>
+                <th>
+
+            <Link to="/add/lunch">Add lunch</Link>
+                </th>
+        </tr>
+        <tr>
+            <th>
+
+            <Link to="/add/dinner">Add dinner</Link>
+            </th>
+        </tr>
+        </>
+        
+        
+        )}
                 {mealData.map((meal,index)=>(
                     <React.Fragment key={index}>
-                             <tr>
-                    <th>Breakfast</th>
-                    <td>calories</td>
-                    <td>carbs</td>
-                    <td>fat</td>
-                    <td>Protein</td>
-                    
-                </tr>
                 {meal.mealType.breakfast.foodProducts.map((food,index)=>(
                 <tr  key={index}>
                     <th>{food.productid.name}</th>
@@ -237,7 +274,7 @@ async function getData() {
                </table>
 
                <div>
-            <Macr val={usersdata.calorieseaten} max={usersdata.userBMR} macrostype={'Calories'}/>
+            <Macr val={calsate} max={usersdata.userBMR} macrostype={'Calories'}/>
             <Macr val={totalmacros.carbs} max={parseFloat(((usersdata.userBMR*0.60)/4).toFixed(2))} macrostype={'Carbs'}/>
             <Macr val={totalmacros.fats} max={parseFloat(((usersdata.userBMR*0.60)/9).toFixed(2))} macrostype={'Fats'}/>
             <Macr val={parseFloat((totalmacros.protein).toFixed(2))} max={parseFloat(((usersdata.userBMR*0.15)/4).toFixed(2))} macrostype={'Protein'}/>

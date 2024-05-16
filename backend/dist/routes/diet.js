@@ -67,8 +67,8 @@ function runChat(data) {
     });
 }
 const router = express_1.default.Router();
-router.get("/", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let meal_type = req.query.meal_type;
+router.post("/", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let meal_type = req.body.meal_type;
     const userId = req.user._doc._id;
     try {
         let data = yield userprofile_1.default.findOne({ userId });
