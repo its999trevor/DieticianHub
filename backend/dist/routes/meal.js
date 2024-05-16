@@ -170,4 +170,48 @@ router.get("/mealbydate", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
         res.status(500).json({ error: "Internal Server Error" });
     }
 }));
+router.delete("/deleteproduct/", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { productId, mealType, date } = req.query;
+        const userId = req.user._doc._id;
+        console.log(productId, typeof (productId), "     ", mealType);
+        const validMealTypes = ["breakfast", "lunch", "dinner"];
+        if (!validMealTypes.includes(mealType)) {
+            return res.status(400).json({ error: "Invalid meal type" });
+        }
+        const currdate = new Date(date);
+        const meal = yield meal_1.default.findOne({ userId, createdAt: { $gte: date, $lt: new Date(currdate.getTime() + 24 * 60 * 60 * 1000) } });
+        if (!meal) {
+            return res.status(404).json({ error: "No meal found for the user" });
+        }
+        const mealTypeData = meal.mealType[mealType];
+        // console.log("mealtype", mealTypeData);
+        if (!mealTypeData) {
+            return res.status(404).json({ error: `No ${mealType} found in the meal` });
+        }
+        const index = mealTypeData.foodProducts.findIndex(foodProduct => (foodProduct.productid).toString() === productId);
+        console.log("index: ", index);
+        if (index === -1) {
+            return res.status(404).json({ error: "Food product not found in the specified meal type" });
+        }
+        // Get the calories of the food product being deleted
+        const deletedFoodProduct = mealTypeData.foodProducts[index];
+        const deletedProduct = yield foodproduct_1.default.findById(deletedFoodProduct.productid);
+        if (!deletedProduct) {
+            return res.status(404).json({ error: "Food product not found" });
+        }
+        const deletedProductCalories = deletedProduct.calories * deletedFoodProduct.quantity;
+        // Subtract the calories from the meal type and total calories
+        mealTypeData.calories -= deletedProductCalories;
+        meal.totalCalories -= deletedProductCalories;
+        // Remove the food product from the meal type
+        mealTypeData.foodProducts.splice(index, 1);
+        yield meal.save();
+        res.json({ message: `Food product deleted successfully from ${mealType}` });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}));
 exports.default = router;

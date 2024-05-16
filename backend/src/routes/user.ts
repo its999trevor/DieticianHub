@@ -37,7 +37,7 @@ router.post("/login",async (req,res) => {
         maxAge: 3600000, 
         path: '/',
       });
-    res.send("user logged in");
+    res.json({message:"user logged in",token});
     }
     else{
         throw new Error("Invalid password");

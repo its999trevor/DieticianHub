@@ -3,7 +3,9 @@ import { Gauge } from '@mui/x-charts/Gauge';
 import "./summary.css"
 import mealService from '../../api/services/mealservice';
 import userProfileService from '../../api/services/userprofile';
+import {useNavigate,Link} from 'react-router-dom'
 const Summary = () => {
+  const navigate = useNavigate();
   let [cals,setCals]=useState(null);
   let [calseaten,setCalseaten]=useState(0);
   let [remaining,setRemaining]=useState(0);
@@ -40,7 +42,7 @@ const Summary = () => {
                      <Gauge className='pchart' width={100} height={100} value={calseaten} valueMin={0} valueMax={cals} />
                      <div className='tip '>  Consumed</div>                  
                      
-                      <button className='btn'>Add food</button> 
+                      <button onClick={()=>{navigate("/diary")}} className='btn'>Add food</button> 
 
                    </div>
         </div>

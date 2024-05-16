@@ -18,7 +18,7 @@ const userProfileService = {
           throw new Error(error.response.data);
         }
       },
-      async getUserProfiledata(userId) {
+      async getUserProfiledata() {
         try {
           const response = await api.get(`/user/userdata`);
           return response.data;

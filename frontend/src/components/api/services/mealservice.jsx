@@ -35,6 +35,18 @@ async getmealbyDate(date){
       console.error('Error fetching data:', error);
       throw new Error(error);
   }
+},
+async deletemeal(productId,mealType,date){
+   try {
+      //   console.log(date);
+      const response = await api.delete(`/meal/deleteproduct`, { params: { productId, mealType, date } });
+      // console.log('Response Data:', response.data);
+  
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      throw new Error(error);
+  }
 } 
 }
 export default mealService

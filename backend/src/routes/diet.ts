@@ -76,15 +76,15 @@ router.get("/", verifyToken, async (req, res) => {
                 
                 name,
                 description,
-                calories
+                calories: in number
             }],lunch:[{
                 name,
                 description,
-                calories
+                calories: in number
             }],dinner:[{
                 name:,
                 description,
-                calories
+                calories:  in number
             }],
             additionalTips
         }

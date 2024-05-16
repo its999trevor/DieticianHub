@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Dashboardnavbar from './Dashboardnavbar';
 import dayjs from 'dayjs';
+import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import { Link } from 'react-router-dom';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -32,6 +33,7 @@ const Diary = () => {
         fats:0,
         protein:0
     })
+    const [usersdata,setUsersdata]=useState({})
     useEffect(() => {
         const totalmac = {
             carbs: macros.breakfast.carbs + macros.lunch.carbs + macros.dinner.carbs,
@@ -40,29 +42,53 @@ const Diary = () => {
         };
         setTotalmacros(totalmac);
     }, [totalmacros]);
-    
-    useEffect(() => {
-        getData();
-    }, [selectedDate]);
 
-    async function getData() {
-        try {
-            let data = await mealService.getmealbyDate(selectedDate.format('MM-DD-YYYY'));
-            setMealData(data);
-            // console.log(data)
-            if(data[0]!=null){
-            const newMacros = {
-                breakfast: calculateMacros(data[0].mealType.breakfast),
-                lunch: calculateMacros(data[0].mealType.lunch),
-                dinner: calculateMacros(data[0].mealType.dinner)
-            };
-            
-            setMacros(newMacros);
-        }
+useEffect(() => {
+    getData();
+}, [selectedDate]);
+useEffect(() => {
+    macrosdata();
+}, [selectedDate]);
+async function deleteproductfrommeal(id,type,date){
+    try{
+    const data=await mealService.deletemeal(id,type,date);
+    getData();
+    macrosdata();
+    console.log(data);
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+async function macrosdata(){
+    try{
+        let userdata=await mealService.getData();
+        // console.log(data)
+        console.log(userdata)
+        setUsersdata(userdata);
+
+
+
+    }catch(err){console.log(err)}
+}
+async function getData() {
+    try {
+        let data = await mealService.getmealbyDate(selectedDate.format('MM-DD-YYYY'));
+        setMealData(data);
+        // console.log(data)
+        if(data[0]!=null){
+        const newMacros = {
+            breakfast: calculateMacros(data[0].mealType.breakfast),
+            lunch: calculateMacros(data[0].mealType.lunch),
+            dinner: calculateMacros(data[0].mealType.dinner)
+        };
         
-            // console.log(data);
-        } catch (error) {
-            console.error('Error fetching meal data:', error);
+        setMacros(newMacros);
+    }
+    
+        // console.log(data);
+    } catch (error) {
+        console.error('Error fetching meal data:', error);
         }
     }
 
@@ -111,7 +137,6 @@ const Diary = () => {
           <button onClick={handleNextDay}>next</button>
         </div>
       </div>
-            <div className=''>
                <table>
                 <tbody>
                 {mealData.map((meal,index)=>(
@@ -122,6 +147,7 @@ const Diary = () => {
                     <td>carbs</td>
                     <td>fat</td>
                     <td>Protein</td>
+                    
                 </tr>
                 {meal.mealType.breakfast.foodProducts.map((food,index)=>(
                 <tr  key={index}>
@@ -130,9 +156,10 @@ const Diary = () => {
                     <td>{food.productid.carbs}</td>
                     <td>{food.productid.fats}</td>
                     <td>{food.productid.protein}</td>
+                    <td><button onClick={()=>{deleteproductfrommeal((food.productid._id),"breakfast",selectedDate.format('MM-DD-YYYY'))}}>del</button></td>
                 </tr>
 
-        ))}
+                ))}
                 <tr>
                 <th><Link to="/add/breakfast">add food</Link></th>
                     <td>{meal?meal.mealType.breakfast.calories:0}</td>
@@ -151,6 +178,8 @@ const Diary = () => {
                     <td>{food.productid.carbs}</td>
                     <td>{food.productid.fats}</td>
                     <td>{food.productid.protein}</td>
+                    <td><button onClick={()=>{deleteproductfrommeal((food.productid._id),"lunch",selectedDate.format('MM-DD-YYYY'))}}>del</button></td>
+
                 </tr>
                ))}
             <tr>
@@ -170,6 +199,8 @@ const Diary = () => {
                     <td>{food.productid.carbs}</td>
                     <td>{food.productid.fats}</td>
                     <td>{food.productid.protein}</td>
+                    <td><button onClick={()=>{deleteproductfrommeal((food.productid._id),"dinner",selectedDate.format('MM-DD-YYYY'))}}>del</button></td>
+
                 </tr>
                ))}
                 <tr>
@@ -186,12 +217,14 @@ const Diary = () => {
                     <td>{totalmacros.fats.toFixed(2)}</td>
                     <td>{totalmacros.protein.toFixed(2)}</td>
                 </tr>
+              
+               
                     
                     </React.Fragment>
                 ))
-
-
-                }
+                
+                
+            }
                
               
                 
@@ -202,7 +235,13 @@ const Diary = () => {
                 
                 </tbody>
                </table>
-            </div>
+
+               <div>
+            <Macr val={usersdata.calorieseaten} max={usersdata.userBMR} macrostype={'Calories'}/>
+            <Macr val={totalmacros.carbs} max={parseFloat(((usersdata.userBMR*0.60)/4).toFixed(2))} macrostype={'Carbs'}/>
+            <Macr val={totalmacros.fats} max={parseFloat(((usersdata.userBMR*0.60)/9).toFixed(2))} macrostype={'Fats'}/>
+            <Macr val={parseFloat((totalmacros.protein).toFixed(2))} max={parseFloat(((usersdata.userBMR*0.15)/4).toFixed(2))} macrostype={'Protein'}/>
+               </div>
 
 
         </div>
@@ -210,5 +249,35 @@ const Diary = () => {
         
   )
 }
+
+
+ 
+
+
+ const Macr = ({val,max,macrostype}) => {
+  return (
+    <>
+    <Gauge
+  value={val}
+  valueMax={max}
+  startAngle={0}
+  endAngle={360}
+  height={120}
+  width={150}
+  sx={{
+      [`& .${gaugeClasses.valueText}`]: {
+          fontSize: 14,
+          transform: 'translate(0px, 0px)',
+        },
+    }}
+    text={
+        ({ value, valueMax }) => `${value} / ${valueMax}     `
+    }
+/><span>{macrostype}</span>
+
+    </>
+  )
+}
+
 
 export default Diary

@@ -47,7 +47,7 @@ const Dashboardnavbar = () => {
 
             <div className='link'><Link to="/home">Home</Link></div>
             <div  className='link'><Link to="/diary">Diary</Link></div>
-            <div  className='link'>Diet Plan</div>
+            <div  className='link'><Link to="/dietplan">Diet Plan</Link></div>
               </div>
             
             <div className='right'><button>Logout</button></div>

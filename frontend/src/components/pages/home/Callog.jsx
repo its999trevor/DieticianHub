@@ -8,7 +8,7 @@ const Callog = () => {
   useEffect(() => {
     fetchdata();
   }, [chartData]);
-
+  // console.log(chartData);
   async function fetchdata() {
     try {
       const userData = await logs.getData();

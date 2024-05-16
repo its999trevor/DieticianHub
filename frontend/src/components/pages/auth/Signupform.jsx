@@ -1,12 +1,14 @@
 import React from 'react'
 import authService from '../../api/services/authservice'
 import { useState } from 'react';
+
 import {useNavigate,Link} from 'react-router-dom'
 const Signupform = () => {
   const [name,setName]=useState("");
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const navigate = useNavigate();
+
 
   async function handleSignup(e){
     e.preventDefault();
@@ -15,6 +17,8 @@ try{
       
       if (data.status==200) {
         let userId=data.data.userId;
+        console.log("signedup")
+      
         navigate('/gender',{ state: {userId} });
       } 
 }
@@ -38,6 +42,7 @@ catch(error){
 
             <button variant='primary'>create account</button>
         </form>
+
 </div>
   )
 }

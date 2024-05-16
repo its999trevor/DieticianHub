@@ -81,15 +81,15 @@ router.get("/", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void
                 
                 name,
                 description,
-                calories
+                calories: in number
             }],lunch:[{
                 name,
                 description,
-                calories
+                calories: in number
             }],dinner:[{
                 name:,
                 description,
-                calories
+                calories:  in number
             }],
             additionalTips
         }

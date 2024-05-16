@@ -48,7 +48,7 @@ router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     maxAge: 3600000,
                     path: '/',
                 });
-                res.send("user logged in");
+                res.json({ message: "user logged in", token });
             }
             else {
                 throw new Error("Invalid password");

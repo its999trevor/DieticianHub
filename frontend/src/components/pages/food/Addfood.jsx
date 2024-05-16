@@ -3,11 +3,13 @@ import Dashboardnavbar from '../Dashboardnavbar';
 import { useParams } from 'react-router-dom';
 import foodproducts from '../../api/services/food';
 import mealService from '../../api/services/mealservice';
+import {useNavigate,Link} from 'react-router-dom'
 
 const Addfood = () => {
     const { mealtype } = useParams();
     const [name, setName] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const navigate = useNavigate();
 
     const searchHandler = async (e) => {
         e.preventDefault();
@@ -27,7 +29,7 @@ const Addfood = () => {
         ));
     };
 
-    const addCheckedItems = async () => {
+    const addCheckedItems = async (e) => {
         try {
             const checkedItems = searchResults.filter(item => item.checked);
             const foodProducts = checkedItems.map(item => ({
@@ -35,6 +37,7 @@ const Addfood = () => {
                 quantity: item.quantity || 1 
             }));
             await mealService.postMeal(mealtype, foodProducts);
+            navigate("/diary");
         } catch (error) {
             console.error('Error adding checked items to meal:', error);
         }
