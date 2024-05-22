@@ -1,86 +1,113 @@
 import React, { useEffect, useState } from 'react';
 import Dashboardnavbar from './Dashboardnavbar';
-import userProfileService from '../api/services/userprofile';
 import GenerateDiet from './GenerateDiet';
+import userProfileService from '../api/services/userprofile';
+import { Box, Select, selectClasses, Option, Typography, IconButton } from '@mui/joy';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const DietPlan = () => {
-  const [dietPlan, setDietPlan] = useState();
-  const [selectedMeals, setSelectedMeals] = useState({
-    breakfast: '',
-    lunch: '',
-    dinner: ''
-  });
+    const [dietPlan, setDietPlan] = useState();
+    const [selectedMeals, setSelectedMeals] = useState({
+        breakfast: '',
+        lunch: '',
+        dinner: ''
+    });
 
-  useEffect(() => {
-    async function getPlan() {
-      try {
-        const data = await userProfileService.getUserProfiledata();
-        // console.log(data);
-        if (data && data.dietplan) {
-          setDietPlan(data.dietplan);
+    useEffect(() => {
+        async function getPlan() {
+            try {
+                const data = await userProfileService.getUserProfiledata();
+                if (data && data.dietplan) {
+                    setDietPlan(data.dietplan);
+                }
+            } catch (error) {
+                console.error('Error fetching diet plan:', error);
+            }
         }
-      } catch (error) {
-        console.error('Error fetching diet plan:', error);
-      }
-    }
-    getPlan();
-  }, [dietPlan]);
+        getPlan();
+    }, []);
 
-  const handleMealChange = (category, mealName) => {
-    setSelectedMeals(prevState => ({
-      ...prevState,
-      [category]: mealName
-    }));
-  };
+    const handleMealChange = (category, mealName) => {
+        setSelectedMeals(prevState => ({
+            ...prevState,
+            [category]: mealName
+        }));
+    };
 
-  return (
-    <div>
-      <Dashboardnavbar />
-      <GenerateDiet />
+    const handleLockMeal = (category) => {
+        setSelectedMeals(prevState => ({
+            ...prevState,
+            [category]: ''
+        }));
+    };
 
-      {dietPlan && (
-        <div className="diet-plan-list">
-          {Object.keys(dietPlan).map((mealCategory) => (
-            mealCategory !== 'additionalTips' ? (
-              <div key={mealCategory}>
-                <h3>{mealCategory}</h3>
-                <select value={selectedMeals[mealCategory]} onChange={(e) => handleMealChange(mealCategory, e.target.value)}>
-                  <option value="">Select {mealCategory} Meal</option>
-                  {dietPlan[mealCategory].map((meal) => (
-                    <option key={meal._id} value={meal.name}>{meal.name}</option>
-                  ))}
-                </select>
-                {selectedMeals[mealCategory] && (
-                  <div>
-                    {(() => {
-                      const meal = dietPlan[mealCategory].find(meal => meal.name === selectedMeals[mealCategory]);
-                      return meal ? (
-                        <>
-                          <p>Description: {meal.description}</p>
-                          <h4>Calories: {meal.calories}</h4>
-                        </>
-                      ) : (
-                        <p>Meal not found</p>
-                      );
-                    })()}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div key={mealCategory}>
-                <h3>Additional Tips</h3>
-                <ul>
-                  {dietPlan.additionalTips.map((tip, index) => (
-                    <li key={index}>{tip}</li>
-                  ))}
-                </ul>
-              </div>
-            )
-          ))}
-        </div>
-      )}
-    </div>
-  );
+    return (
+        <>
+            <Dashboardnavbar />
+            <Box mx={4} my={3}>
+
+            <GenerateDiet />
+            {dietPlan && (
+                <div className="diet-plan-list">
+                    {Object.keys(dietPlan).map((mealCategory) => (
+                        mealCategory !== 'additionalTips' ? (
+                            <Box key={mealCategory} mb={2}>
+                                <Typography variant="h3">{mealCategory}</Typography>
+                                {selectedMeals[mealCategory] ? (
+                                    <Box display="flex" alignItems="center">
+                                        <Typography variant="subtitle1">{selectedMeals[mealCategory]}</Typography>
+                                        <IconButton onClick={() => handleLockMeal(mealCategory)} size="small">
+                                            <CheckCircleIcon />
+                                        </IconButton>
+                                    </Box>
+                                ) : (
+                                    <Select
+                                        value={selectedMeals[mealCategory]}
+                                        onChange={(e,value) => handleMealChange(mealCategory,value)}
+                                        placeholder={`Select ${mealCategory} Meal`}
+                                        IconComponent={KeyboardArrowDown}
+                                        sx={{ width: 240 }}
+                                    >
+                                        {dietPlan[mealCategory].map((meal) => (
+                                            <Option key={meal._id} value={meal.name}>{meal.name}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                                {selectedMeals[mealCategory] && (
+                                    <div>
+                                        {(() => {
+                                            const meal = dietPlan[mealCategory].find(meal => meal.name === selectedMeals[mealCategory]);
+                                            return meal ? (
+                                                <>
+                                                    {/* <Typography level='title-lg'>Name: {meal.name}</Typography> */}
+                                                    <Typography>Description: {meal.description}</Typography>
+                                                    <Typography variant="h4">Calories: {meal.calories}</Typography>
+                                                </>
+                                            ) : (
+                                                <Typography>Meal not found</Typography>
+                                            );
+                                        })()}
+                                    </div>
+                                )}
+                            </Box>
+                        ) : (
+                            <Box key={mealCategory} mb={2}>
+                                <Typography variant="h3">Additional Tips</Typography>
+                                <ul>
+                                    {dietPlan.additionalTips.map((tip, index) => (
+                                        <li key={index}>{tip}</li>
+                                    ))}
+                                </ul>
+                            </Box>
+                        )
+                    ))}
+                </div>
+            )}
+            </Box>
+        </>
+    );
 };
 
 export default DietPlan;
+ 

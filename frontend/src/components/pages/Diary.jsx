@@ -290,7 +290,7 @@ async function getData() {
                     <td>{food.productid.carbs}</td>
                     <td>{food.productid.fats}</td>
                     <td>{food.productid.protein}</td>
-                    <td><Button size="md" variant="soft" color="danger" onClick={()=>{deleteproductfrommeal((food.productid._id),"lunch",selectedDate.format('MM-DD-YYYY'))}}>del</Button></td>
+                    <td><Button size="md" variant="soft" color="danger" onClick={()=>{deleteproductfrommeal((food.productid._id),"lunch",selectedDate.format('MM-DD-YYYY'))}}>Delete</Button></td>
 
                 </tr>
                ))}
@@ -312,7 +312,7 @@ async function getData() {
                     <td>{food.productid.carbs}</td>
                     <td>{food.productid.fats}</td>
                     <td>{food.productid.protein}</td>
-                    <td><Button size="md" variant="soft" color="danger" onClick={()=>{deleteproductfrommeal((food.productid._id),"dinner",selectedDate.format('MM-DD-YYYY'))}}>del</Button></td>
+                    <td><Button size="md" variant="soft" color="danger" onClick={()=>{deleteproductfrommeal((food.productid._id),"dinner",selectedDate.format('MM-DD-YYYY'))}}>Delete</Button></td>
 
                 </tr>
                ))}

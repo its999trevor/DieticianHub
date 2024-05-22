@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import userProfileService from '../../api/services/userprofile';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import Dashboardnavbar from '../Dashboardnavbar';
+import { Box, Button, Typography, Input } from '@mui/joy';
 
 const UserProfile = () => {
   const [userData, setUserData] = useState({});
@@ -42,57 +43,73 @@ const UserProfile = () => {
   };
 
   return (
-    <div>
-        <Dashboardnavbar/>
-      <h2>User Profile</h2>
-      <div>
-        <p>Email: {auth.email}</p>
-        <p>
-          Gender: {editMode ? (
-            <input type="text" name="gender" value={userData.gender} onChange={handleInputChange} />
-          ) : (
-            userData.gender
-          )}
-        </p>
-        <p>
-          Weight: {editMode ? (
-            <input type="text" name="weight" value={userData.weight} onChange={handleInputChange} />
-          ) : (
-            userData.weight
-          )}
-        </p>
-        <p>
-          Height: {editMode ? (
-            <input type="text" name="height" value={userData.height} onChange={handleInputChange} />
-          ) : (
-            userData.height
-          )}
-        </p>
-        <p>
-          Age: {editMode ? (
-            <input type="text" name="age" value={userData.age} onChange={handleInputChange} />
-          ) : (
-            userData.age
-          )}
-        </p>
-        <p>
-          Activity: {editMode ? (
-            <input type="text" name="activity" value={userData.activity} onChange={handleInputChange} />
-          ) : (
-            userData.activity
-          )}
-        </p>
-      </div>
-      {editMode ? (
-        <div>
-          <button onClick={handleSubmit}>Submit</button>
-        </div>
-      ) : (
-        <button onClick={handleEdit}>Edit</button>
-      )}
-      <button>Delete</button>
-      {message && <p>{message}</p>}
-    </div>
+    <>
+      <Dashboardnavbar />
+      <Box   height={700}
+      width={500}
+      my={10}
+      mx={90}
+      display="box"
+      alignItems="center"
+      alignContent={"center"}
+      gap={4}
+      p={2}
+      sx={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;" }}>
+        <Typography level="h1" mb={2}>User Profile</Typography>
+        <Box mb={4}>
+          <Typography variant="subtitle1">Email: {auth.email}</Typography>
+          <Box mt={2}>
+            <Typography level="h3">Profile Data</Typography>
+            <Typography variant="subtitle1">
+              Gender: {editMode ? (
+                <Input name="gender" value={userData.gender} onChange={handleInputChange} />
+              ) : (
+                userData.gender
+              )}
+            </Typography>
+            <Typography variant="subtitle1">
+              Weight: {editMode ? (
+                <Input name="weight" value={userData.weight} onChange={handleInputChange} />
+              ) : (
+                userData.weight
+              )}
+            </Typography>
+            <Typography variant="subtitle1">
+              Height: {editMode ? (
+                <Input name="height" value={userData.height} onChange={handleInputChange} />
+              ) : (
+                userData.height
+              )}
+            </Typography>
+            <Typography variant="subtitle1">
+              Age: {editMode ? (
+                <Input name="age" value={userData.age} onChange={handleInputChange} />
+              ) : (
+                userData.age
+              )}
+            </Typography>
+            <Typography variant="subtitle1">
+              Activity: {editMode ? (
+                <Input name="activity" value={userData.activity} onChange={handleInputChange} />
+              ) : (
+                userData.activity
+              )}
+            </Typography>
+          </Box>
+        </Box> 
+        {editMode ? (
+          <Box >
+            <Button variant="solid" onClick={handleSubmit}>Submit</Button>
+          </Box>
+        ) : (
+          <Box>
+            <Button variant="outlined" onClick={handleEdit}>Edit</Button>
+          </Box>
+        )}
+        <Button variant="outlined">Delete</Button>
+        {message && <Typography>{message}</Typography>}
+      </Box>
+    </>
   );
 };
 

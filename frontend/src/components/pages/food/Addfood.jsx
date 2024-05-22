@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Box, Typography, Button, Autocomplete, Input, Checkbox, Modal } from '@mui/joy';
 import Newfood from './Newfood';
+
 const Addfood = () => {
     const { mealtype, date } = useParams();
     const [selectedDate, setSelectedDate] = useState(dayjs(date));
@@ -29,7 +30,7 @@ const Addfood = () => {
 
     useEffect(() => {
         const storedItems = JSON.parse(localStorage.getItem('recentItems')) || [];
-        setRecentItems(storedItems.map(item => ({ ...item, checked: false }))); // Initialize checked to false
+        setRecentItems(storedItems.map(item => ({ ...item, checked: false })));
     }, []);
 
     const searchHandler = async (event, value) => {
@@ -74,8 +75,8 @@ const Addfood = () => {
                 updatedItems.push(item);
             }
         });
-        localStorage.setItem('recentItems', JSON.stringify(updatedItems.slice(-10))); // Store last 10 items
-        setRecentItems(updatedItems.slice(-10).map(item => ({ ...item, checked: false }))); // Ensure checked is false
+        localStorage.setItem('recentItems', JSON.stringify(updatedItems.slice(-10)));
+        setRecentItems(updatedItems.slice(-10).map(item => ({ ...item, checked: false })));
     };
 
     const toggleRecentChecked = (itemId) => {
@@ -103,6 +104,7 @@ const Addfood = () => {
             console.error('Error adding recent items to meal:', error);
         }
     };
+
     const handleOpenModal = () => {
         setOpenModal(true);
     };
@@ -123,7 +125,7 @@ const Addfood = () => {
                     options={options}
                     getOptionLabel={(option) => option.name}
                     onInputChange={(event, value) => searchHandler(event, value)}
-                    renderinput={(params) => <Input {...params} placeholder="Search food" />} // Use renderinput instead of renderInput
+                    renderInput={(params) => <Input {...params} placeholder="Search food" />}
                 />
                 <Box mx={2} my={2}>
                     {searchResults.map((item) => (
