@@ -24,15 +24,15 @@ const Allroutes = () => {
   return (
     <div>
         <Routes>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/signup" element={<Signup/>}/>
-             
+            
+            <Route path="/login"  element={!isAuth?<Login/>:<Dashboard/>}/>
+            <Route path="/signup"  element={!isAuth?<Signup/>:<Dashboard/>}/>
             <Route path="/" element={!isAuth?<Homepage/>:<Dashboard/>}/>
-          <Route path="/gender" element={<Profileform />} />
-          <Route path="/weight" element={<Weight />} />
-          <Route path="/height" element={<Height />} />
-          <Route path="/age" element={<Age/>} />
-          <Route path="/activity" element={<Activity/>} />
+          <Route path="/gender" element={!isAuth?<Profileform/>:<Dashboard/>}/>
+          <Route path="/weight" element={!isAuth?<Weight />:<Dashboard/>} />
+          <Route path="/height" element={!isAuth?<Height />:<Dashboard/>} />
+          <Route path="/age" element={!isAuth?<Age/>:<Dashboard/>} />
+          <Route path="/activity" element={!isAuth?<Activity/>:<Dashboard/>} />
         
           <Route element={<AuthOutlet fallbackPath='/login' />}>
           <Route path="/home" element={<Dashboard />} />
