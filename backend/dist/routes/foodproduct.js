@@ -20,7 +20,7 @@ router.post("/add", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         let { name, calories, description, fats, fibers, carbs, protein } = req.body;
         let newFood = new foodproduct_1.default({ name, calories, description, fats, fibers, carbs, protein });
         yield newFood.save();
-        res.send("new foodproduct added");
+        res.json({ data: newFood, message: "new foodproduct added" });
     }
     catch (err) {
         res.status(500).send(err);

@@ -7,7 +7,7 @@ try{
     let {name,calories,description,fats,fibers,carbs,protein}=req.body;
     let newFood=new foodproduct({name,calories,description,fats,fibers,carbs,protein});
     await newFood.save();
-    res.send("new foodproduct added");
+    res.json({data:newFood,message:"new foodproduct added"});
 }
 catch(err){
     res.status(500).send(err);

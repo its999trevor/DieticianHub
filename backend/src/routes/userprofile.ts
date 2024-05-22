@@ -92,9 +92,9 @@ catch (error) {
 }
 
 })
-router.put("/updateuser/:userId", async (req, res) => {
+router.put("/updateuser/",verifyToken, async (req, res) => {
     try {
-        const userId = req.params.userId;
+        const userId = req.user._doc._id;
         const { gender,weight, height, age, activity } = req.body;
         let bmr;
         if(!bmr){

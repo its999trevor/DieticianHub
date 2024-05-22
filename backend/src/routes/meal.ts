@@ -36,25 +36,29 @@ type MealType = {
     };
 };
 
-router.post("/:mealType",verifyToken, async (req, res) => {
+router.post("/:mealType", verifyToken, async (req, res) => {
     try {
-        const { foodProducts } = req.body;
-        const userId=req.user._doc._id;
+        const { foodProducts, date } = req.body;
+        const userId = req.user._doc._id;
         const mealType = req.params.mealType.toLowerCase() as keyof MealType;
-        console.log(foodProducts);
+
         if (!Array.isArray(foodProducts)) {
             return res.status(400).json({ error: 'Invalid foodProducts data' });
         }
-        const currentDate = new Date().setHours(0, 0, 0, 0); 
 
-        let meal = await Meal.findOne({ userId, createdAt: { $gte: currentDate } });
+        const specifiedDate = new Date(date);
+        const startOfDay = new Date(specifiedDate.setHours(0, 0, 0, 0));
+
+        let meal = await Meal.findOne({ userId, createdAt: { $gte: startOfDay, $lt: new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000) } });
+
         if (!meal) {
-            meal = new Meal({ userId, mealType: {} as MealType });
+            meal = new Meal({ userId, createdAt: startOfDay, mealType: {} as MealType });
         }
 
         if (!meal.mealType[mealType]) {
             meal.mealType[mealType] = { foodProducts: [], calories: 0 };
         }
+
         for (const entry of foodProducts) {
             const existingFoodProduct = meal.mealType[mealType].foodProducts.find(
                 (item) => item.productid == entry.productid
@@ -64,48 +68,46 @@ router.post("/:mealType",verifyToken, async (req, res) => {
                 const calories = foodProduct.calories * entry.quantity;
                 if (existingFoodProduct) {
                     existingFoodProduct.quantity += entry.quantity;
+                } else {
+                    meal.mealType[mealType].foodProducts.push({
+                        productid: entry.productid,
+                        quantity: entry.quantity,
+                        addedAt: new Date()
+                    });
                 }
-                else{
-                meal.mealType[mealType].foodProducts.push({
-                    productid: entry.productid,
-                    quantity: entry.quantity,
-                    addedAt: new Date()
-                });
-            }
                 meal.mealType[mealType].calories += calories;
-                meal.totalCalories += calories;
+                meal.totalCalories = (meal.totalCalories || 0) + calories;
             }
         }
-        
-        
+
         await meal.save();
-         
+
         const userDailyLog = await dailylog.findOne({ userId });
 
         if (userDailyLog) {
-            const currentLog = userDailyLog.logs.find(log => log.date.getTime() === currentDate);
-        
+            const currentLog = userDailyLog.logs.find(log => log.date.getTime() === startOfDay.getTime());
+
             if (!currentLog) {
-               
                 userDailyLog.logs.push({
-                    date: new Date(currentDate),
+                    date: new Date(startOfDay),
                     mealeaten: meal._id
                 });
             }
-        
+
             await userDailyLog.save();
         } else {
             const newDailyLog = new dailylog({
                 userId,
                 logs: [{
-                    date: new Date(currentDate),
+                    date: new Date(startOfDay),
                     mealeaten: meal._id
                 }]
             });
             await newDailyLog.save();
         }
-        res.status(200).json({ message:`Food products added to ${mealType} successfully` });
-        
+
+        res.status(200).json({ message: `Food products added to ${mealType} successfully` });
+
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
@@ -150,6 +152,8 @@ router.get("/mealdata",verifyToken,async(req,res)=>{
     let TotalFiber = 0;
     let TotalCarbs = 0;
     let calorieseaten = 0;
+    let userBMR; 
+    let userBMI;
     if (data) {
         calorieseaten = data.totalCalories || 0;
         for (const mealTypeKey of Object.keys(data.mealType) as (keyof typeof data.mealType)[]) {
@@ -169,15 +173,14 @@ router.get("/mealdata",verifyToken,async(req,res)=>{
         }
         
         const userProfileData = await userProfile.findOne({ userId });
-        let userBMR; 
-        let userBMI;
         if (userProfileData) {
             userBMR = userProfileData.bmr || 0;
             userBMI = userProfileData.bmi || 0;
         }
     
 
-    // Send the calculated totals as a response
+        // Send the calculated totals as a response
+    }
     res.json({
         TotalProtein,
         TotalFats,
@@ -187,7 +190,6 @@ router.get("/mealdata",verifyToken,async(req,res)=>{
         userBMR,
         userBMI
     });
-}
 } catch (error) {
     console.error("Error fetching meal data:", error);
     res.status(500).json({ error: "Internal server error" });

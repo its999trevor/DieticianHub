@@ -21,17 +21,17 @@ const userprofile_1 = __importDefault(require("../model/userprofile"));
 const router = express_1.default.Router();
 router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { foodProducts } = req.body;
+        const { foodProducts, date } = req.body;
         const userId = req.user._doc._id;
         const mealType = req.params.mealType.toLowerCase();
-        console.log(foodProducts);
         if (!Array.isArray(foodProducts)) {
             return res.status(400).json({ error: 'Invalid foodProducts data' });
         }
-        const currentDate = new Date().setHours(0, 0, 0, 0);
-        let meal = yield meal_1.default.findOne({ userId, createdAt: { $gte: currentDate } });
+        const specifiedDate = new Date(date);
+        const startOfDay = new Date(specifiedDate.setHours(0, 0, 0, 0));
+        let meal = yield meal_1.default.findOne({ userId, createdAt: { $gte: startOfDay, $lt: new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000) } });
         if (!meal) {
-            meal = new meal_1.default({ userId, mealType: {} });
+            meal = new meal_1.default({ userId, createdAt: startOfDay, mealType: {} });
         }
         if (!meal.mealType[mealType]) {
             meal.mealType[mealType] = { foodProducts: [], calories: 0 };
@@ -52,16 +52,16 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
                     });
                 }
                 meal.mealType[mealType].calories += calories;
-                meal.totalCalories += calories;
+                meal.totalCalories = (meal.totalCalories || 0) + calories;
             }
         }
         yield meal.save();
         const userDailyLog = yield dailylog_1.default.findOne({ userId });
         if (userDailyLog) {
-            const currentLog = userDailyLog.logs.find(log => log.date.getTime() === currentDate);
+            const currentLog = userDailyLog.logs.find(log => log.date.getTime() === startOfDay.getTime());
             if (!currentLog) {
                 userDailyLog.logs.push({
-                    date: new Date(currentDate),
+                    date: new Date(startOfDay),
                     mealeaten: meal._id
                 });
             }
@@ -71,7 +71,7 @@ router.post("/:mealType", auth_1.verifyToken, (req, res) => __awaiter(void 0, vo
             const newDailyLog = new dailylog_1.default({
                 userId,
                 logs: [{
-                        date: new Date(currentDate),
+                        date: new Date(startOfDay),
                         mealeaten: meal._id
                     }]
             });
@@ -116,6 +116,8 @@ router.get("/mealdata", auth_1.verifyToken, (req, res) => __awaiter(void 0, void
         let TotalFiber = 0;
         let TotalCarbs = 0;
         let calorieseaten = 0;
+        let userBMR;
+        let userBMI;
         if (data) {
             calorieseaten = data.totalCalories || 0;
             for (const mealTypeKey of Object.keys(data.mealType)) {
@@ -131,23 +133,21 @@ router.get("/mealdata", auth_1.verifyToken, (req, res) => __awaiter(void 0, void
                 });
             }
             const userProfileData = yield userprofile_1.default.findOne({ userId });
-            let userBMR;
-            let userBMI;
             if (userProfileData) {
                 userBMR = userProfileData.bmr || 0;
                 userBMI = userProfileData.bmi || 0;
             }
             // Send the calculated totals as a response
-            res.json({
-                TotalProtein,
-                TotalFats,
-                TotalFiber,
-                TotalCarbs,
-                calorieseaten,
-                userBMR,
-                userBMI
-            });
         }
+        res.json({
+            TotalProtein,
+            TotalFats,
+            TotalFiber,
+            TotalCarbs,
+            calorieseaten,
+            userBMR,
+            userBMI
+        });
     }
     catch (error) {
         console.error("Error fetching meal data:", error);

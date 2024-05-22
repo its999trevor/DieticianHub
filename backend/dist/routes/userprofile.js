@@ -97,9 +97,9 @@ router.get("/userdata", auth_1.verifyToken, (req, res) => __awaiter(void 0, void
         res.status(500).send("Internal Server Error");
     }
 }));
-router.put("/updateuser/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/updateuser/", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userId = req.params.userId;
+        const userId = req.user._doc._id;
         const { gender, weight, height, age, activity } = req.body;
         let bmr;
         if (!bmr) {
