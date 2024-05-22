@@ -5,6 +5,8 @@ import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
 import App from './App.jsx'
 import './index.css'
+import '@fontsource/inter';
+
 
 const store = createStore({
   authName:'_auth',
@@ -12,7 +14,7 @@ const store = createStore({
   cookieDomain: window.location.hostname,
   cookieSecure:true,
 });
-console.log(store)
+// console.log(store)
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
         <AuthProvider store={store}>

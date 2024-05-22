@@ -5,7 +5,7 @@ import Loginform from './auth/Loginform'
 const Login = () => {
   return (
         <>
-        <Navbar/>
+        <Navbar classname={"navbar navcolor"} />
         <Loginform/>
         </>
 )

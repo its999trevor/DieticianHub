@@ -6,7 +6,7 @@ const Signup = () => {
 
   return (
     <>
-    <Navbar/>
+    <Navbar classname={"navbar navcolor"}/>
     <Signupform/>
     </>
   )

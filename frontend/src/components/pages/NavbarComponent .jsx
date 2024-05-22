@@ -1,34 +1,31 @@
 import React from 'react'
 import {BrowserRouter,Routes,Route, useNavigate,Link} from 'react-router-dom'
-
+import { FaUserCircle } from "react-icons/fa";
 import img from '../../assets/logo.png'
 
-const NavbarComponent  = () => {
+const NavbarComponent  = ({classname}) => {
   const navigate=useNavigate();
 
   return (
-      <>
+      <div className={`${classname}`} style={{display:"inline-flex"}}>
       
-          <div  onClick={()=>{
-                  navigate("/");
-
-            }} >
             <img
               alt=""
               src={img}
-              width="200"
-              height="30"
-              className="d-inline-block align-top"
-            />
-          </div>
-         
-            <button onClick={()=>{
-                  navigate("/login");
+              width={250}
+              style={{paddingInlineStart:"300px"}}
+              onClick={()=>{
+                navigate("/");
 
-            }} >Login</button>
+          }}
+            />
+            
+         
+           <FaUserCircle size={40} style={{paddingInlineStart:"900px",paddingBlockStart:"15px"}} onClick={()=>{
+              navigate("/login");}} />
         
      
-      </>
+      </div>
   )
 }
 

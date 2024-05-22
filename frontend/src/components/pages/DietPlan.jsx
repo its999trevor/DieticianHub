@@ -4,30 +4,27 @@ import userProfileService from '../api/services/userprofile';
 import GenerateDiet from './GenerateDiet';
 
 const DietPlan = () => {
-  const [dietPlan, setDietPlan] = useState(null);
+  const [dietPlan, setDietPlan] = useState();
   const [selectedMeals, setSelectedMeals] = useState({
     breakfast: '',
     lunch: '',
     dinner: ''
   });
 
- 
-
   useEffect(() => {
+    async function getPlan() {
+      try {
+        const data = await userProfileService.getUserProfiledata();
+        // console.log(data);
+        if (data && data.dietplan) {
+          setDietPlan(data.dietplan);
+        }
+      } catch (error) {
+        console.error('Error fetching diet plan:', error);
+      }
+    }
     getPlan();
   }, [dietPlan]);
-
-  async function getPlan() {
-    try {
-      const data = await userProfileService.getUserProfiledata();
-      // console.log(data);
-      if (data && data.dietplan) {
-        setDietPlan(data.dietplan);
-      }
-    } catch (error) {
-      console.error('Error fetching diet plan:', error);
-    }
-  }
 
   const handleMealChange = (category, mealName) => {
     setSelectedMeals(prevState => ({
@@ -39,7 +36,7 @@ const DietPlan = () => {
   return (
     <div>
       <Dashboardnavbar />
-        <GenerateDiet/>
+      <GenerateDiet />
 
       {dietPlan && (
         <div className="diet-plan-list">
@@ -50,13 +47,22 @@ const DietPlan = () => {
                 <select value={selectedMeals[mealCategory]} onChange={(e) => handleMealChange(mealCategory, e.target.value)}>
                   <option value="">Select {mealCategory} Meal</option>
                   {dietPlan[mealCategory].map((meal) => (
-                    <option key={meal._id}>{meal.name}</option>
+                    <option key={meal._id} value={meal.name}>{meal.name}</option>
                   ))}
                 </select>
                 {selectedMeals[mealCategory] && (
                   <div>
-                    <p>Description: {dietPlan[mealCategory].find(meal => meal.name === selectedMeals[mealCategory]).description}</p>
-                    <h4>Calories: {dietPlan[mealCategory].find(meal => meal.name === selectedMeals[mealCategory]).calories}</h4>
+                    {(() => {
+                      const meal = dietPlan[mealCategory].find(meal => meal.name === selectedMeals[mealCategory]);
+                      return meal ? (
+                        <>
+                          <p>Description: {meal.description}</p>
+                          <h4>Calories: {meal.calories}</h4>
+                        </>
+                      ) : (
+                        <p>Meal not found</p>
+                      );
+                    })()}
                   </div>
                 )}
               </div>

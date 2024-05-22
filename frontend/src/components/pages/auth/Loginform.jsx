@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import {useNavigate,Link} from 'react-router-dom'
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
-
+import { Input, Typography } from '@mui/joy';
+import Button from '@mui/joy/Button';
+import Stack from '@mui/joy/Stack';
+import Box from '@mui/joy/Box';
 import authService from '../../api/services/authservice'
 import { useEffect } from 'react';
 
@@ -23,7 +26,7 @@ const Loginform = () => {
                   expiresIn: 3600,
                   type: 'Bearer',
                 },
-                authstate: { email: email }
+                userState: { email: email }
                   
               })) {
                   navigate('/home');
@@ -37,24 +40,41 @@ const Loginform = () => {
   }
 
   return (
-    <div>
-               
+    <Box
+      height={400}
+      width={400}
+      my={10}
+      mx={90}
+      display="box"
+      alignItems="center"
+      alignContent={"center"}
+      gap={4}
+      p={2}
+      sx={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;" }}
+    >
+
                <form onSubmit={loginHandler}>
                  
-                   <input required  onChange={(e)=>setEmail(e.target.value)} type='email' placeholder='email address'/>
+               <Stack spacing={1}>
+                   <Input sx={{width:"400px",minHeight:"50px"}} required  onChange={(e)=>setEmail(e.target.value)} type='email' placeholder='email address'/>
                   
-                   <input required onChange={(e)=>setPassword(e.target.value)} type='password' placeholder='password'/>
+                   <Input sx={{width:"400px",minHeight:"50px"}} required onChange={(e)=>setPassword(e.target.value)} type='password' placeholder='password'/>
+                   <Typography level="title-sm" >
+               <Link to="#">forgot password?</Link>
+</Typography>
                  
-                   <button>Submit</button>
+                   <Button type="submit" sx={{width:"400px",minHeight:"50px"}}>Submit</Button >
+               </Stack>
                    
                </form>
-              new user?
-                <Link to="/signup">sign up now!</Link>
-               <Link to="#">forgot password?</Link>
-              
+               <Typography level="title-sm" >
+              new user? 
+                <Link to="/signup"> sign up now!</Link>  
+               </Typography>
 
+            
 
-    </div>
+               </Box>
   )
 }
 

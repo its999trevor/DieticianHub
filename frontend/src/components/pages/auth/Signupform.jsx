@@ -1,7 +1,10 @@
 import React from 'react'
 import authService from '../../api/services/authservice'
 import { useState } from 'react';
-
+import { Input, Typography } from '@mui/joy';
+import Button from '@mui/joy/Button';
+import Stack from '@mui/joy/Stack';
+import Box from '@mui/joy/Box';
 import {useNavigate,Link} from 'react-router-dom'
 const Signupform = () => {
   const [name,setName]=useState("");
@@ -27,23 +30,37 @@ catch(error){
 }
   }
   return (
-    <div> 
+    <Box
+    height={400}
+    width={400}
+    my={10}
+    mx={90}
+    display="box"
+    alignItems="center"
+    alignContent={"center"}
+    gap={4}
+    p={2}
+    sx={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;" }}
+  > 
   
         <form onSubmit={handleSignup} >
+        <Stack spacing={1}>
       
                
-            <input required onChange={(e)=>setName(e.target.value)} placeholder='name'/>
+            <Input sx={{width:"400px",minHeight:"50px"}} required onChange={(e)=>setName(e.target.value)} placeholder='name'/>
          
-            <input required onChange={(e)=>setEmail(e.target.value)} type='email' placeholder='email address'/>
+            <Input sx={{width:"400px",minHeight:"50px"}} required onChange={(e)=>setEmail(e.target.value)} type='email' placeholder='email address'/>
          
-            <input required onChange={(e)=>setPassword(e.target.value)} minLength={6} type='password' placeholder='password'/>
+            <Input sx={{width:"400px",minHeight:"50px"}} required onChange={(e)=>setPassword(e.target.value)} minLength={6} type='password' placeholder='password'/>
           
              
 
-            <button variant='primary'>create account</button>
+            <Button type="submit" sx={{width:"400px",minHeight:"50px"}}>create account</Button>
+            </Stack>
         </form>
 
-</div>
+
+</Box>
   )
 }
 

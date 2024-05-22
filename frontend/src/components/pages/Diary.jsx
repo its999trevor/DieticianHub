@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Dashboardnavbar from './Dashboardnavbar';
 import dayjs from 'dayjs';
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import mealService from '../api/services/mealservice';
+import { Box,Table,Sheet, Input, Stack,Button, Typography } from '@mui/joy';
 
 const Diary = () => {
-    const [selectedDate, setSelectedDate] = useState(dayjs());
+    const { date } = useParams();   
+    const [selectedDate, setSelectedDate] = useState(date ? dayjs(date) : dayjs());
+   
     const [mealData, setMealData] = useState([]);
     const [calsate,setCalsate]=useState(0);
     const [macros, setMacros] = useState({
@@ -135,23 +138,93 @@ async function getData() {
   };
 
   return (
-    <div>
+    <>
       <Dashboardnavbar />
-      <div>
+      <Box width={1000}
+      
+       mx={55} px={5} py={5} my={1}  display={"flow"} boxShadow={"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;"}>
+
+      <Box>
+        <Stack spacing={3}>
+
+      <Typography
+            level="h3"
+            variant="plain"
+            >
+
         Your food diary for {selectedDate.format('MM-DD-YYYY')}
-        <div>
-          <button onClick={handlePrevDay}>prev</button>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+        </Typography>
+        <Box >
+        <Stack direction="row" spacing={3}>
+          <Button sx={{width:"80px",height:"30px",position:"relative",top:"10px"}} onClick={handlePrevDay}>prev</Button>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>  
             <DatePicker
               label="date"
               value={selectedDate}
               onChange={(newDate) => setSelectedDate(newDate)}
-            />
+              />
           </LocalizationProvider>
-          <button onClick={handleNextDay}>next</button>
-        </div>
-      </div>
-               <table>
+          <Button sx={{width:"80px",height:"30px",position:"relative",top:"10px"}} onClick={handleNextDay}>next</Button>
+              </Stack>
+        </Box>
+              </Stack>
+      </Box>
+      <Box mx={3} my={3}>
+      <Sheet
+        variant="outlined"
+    
+        sx={{
+          '--TableCell-height': '40px',
+          // the number is the amount of the header rows.
+          '--TableHeader-height': 'calc(1 * var(--TableCell-height))',
+          '--Table-firstColumnWidth': '80px',
+          '--Table-lastColumnWidth': '144px',
+          // background needs to have transparency to show the scrolling shadows
+          '--TableRow-stripeBackground': 'rgba(0 0 0 / 0.04)',
+          '--TableRow-hoverBackground': 'rgba(0 0 0 / 0.08)',
+          overflow: 'auto',
+          background: (theme) =>
+            `linear-gradient(to right, ${theme.vars.palette.background.surface} 30%, rgba(255, 255, 255, 0)),
+            linear-gradient(to right, rgba(255, 255, 255, 0), ${theme.vars.palette.background.surface} 70%) 0 100%,
+            radial-gradient(
+              farthest-side at 0 50%,
+              rgba(0, 0, 0, 0.12),
+              rgba(0, 0, 0, 0)
+            ),
+            radial-gradient(
+                farthest-side at 100% 50%,
+                rgba(0, 0, 0, 0.12),
+                rgba(0, 0, 0, 0)
+              )
+              0 100%`,
+          backgroundSize:
+            '40px calc(100% - var(--TableCell-height)), 40px calc(100% - var(--TableCell-height)), 14px calc(100% - var(--TableCell-height)), 14px calc(100% - var(--TableCell-height))',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'local, local, scroll, scroll',
+          backgroundPosition:
+            'var(--Table-firstColumnWidth) var(--TableCell-height), calc(100% - var(--Table-lastColumnWidth)) var(--TableCell-height), var(--Table-firstColumnWidth) var(--TableCell-height), calc(100% - var(--Table-lastColumnWidth)) var(--TableCell-height)',
+          backgroundColor: 'background.surface',
+        }}
+      >
+
+               <Table       
+                             borderAxis="bothBetween"
+                             stripe="odd"
+                             hoverRow
+                             sx={{
+                               '& tr > *:first-child': {
+                                 position: 'sticky',
+                                 left: 0,
+                                 boxShadow: '1px 0 var(--TableCell-borderColor)',
+                                 bgcolor: 'background.surface',
+                               },
+                               '& tr > *:last-child': {
+                                 position: 'sticky',
+                                 right: 0,
+                                 bgcolor: 'var(--TableCell-headBackground)',
+                               }
+                             }}
+               >
                 <tbody>
                     <tr>
            <th>Breakfast</th>
@@ -159,93 +232,97 @@ async function getData() {
            <td>carbs</td>
            <td>fat</td>
            <td>Protein</td>
+           <td></td>
            
        </tr>
        {mealData.length === 0 && (
         <>
             <tr>
         <th>
-        <Link to="/add/breakfast">Add breakfast</Link>
+        <Link to={`/add/breakfast/${selectedDate}`}>Add breakfast</Link>
         </th>
         </tr>
         <tr>
                 <th>
 
-            <Link to="/add/lunch">Add lunch</Link>
+            <Link to={`/add/lunch/${selectedDate}`}>Add lunch</Link>
                 </th>
         </tr>
         <tr>
             <th>
 
-            <Link to="/add/dinner">Add dinner</Link>
+            <Link to={`/add/dinner/${selectedDate}`}>Add dinner</Link>
             </th>
         </tr>
         </>
         
         
-        )}
+    )}
                 {mealData.map((meal,index)=>(
                     <React.Fragment key={index}>
                 {meal.mealType.breakfast.foodProducts.map((food,index)=>(
-                <tr  key={index}>
+                    <tr  key={index}>
                     <th>{food.productid.name}</th>
                     <td>{food.productid.calories*food.quantity}</td>
                     <td>{food.productid.carbs}</td>
                     <td>{food.productid.fats}</td>
                     <td>{food.productid.protein}</td>
-                    <td><button onClick={()=>{deleteproductfrommeal((food.productid._id),"breakfast",selectedDate.format('MM-DD-YYYY'))}}>del</button></td>
+                    <td><Button size="md" variant="soft" color="danger" onClick={()=>{deleteproductfrommeal((food.productid._id),"breakfast",selectedDate.format('MM-DD-YYYY'))}}>Delete</Button></td>
                 </tr>
 
-                ))}
+))}
                 <tr>
-                <th><Link to="/add/breakfast">add food</Link></th>
+                <th><Link to={`/add/breakfast/${selectedDate}`}>add food</Link></th>
                     <td>{meal?meal.mealType.breakfast.calories:0}</td>
                     <td>{macros.breakfast.carbs}</td>
                     <td>{macros.breakfast.fats}</td>
                     <td>{macros.breakfast.protein}</td>
+                    <td></td>
                     
                 </tr>
                 <tr>
-                    <th>Lunch</th>
+                    <th colSpan={6}>Lunch</th>
                     </tr>
                 {meal.mealType.lunch.foodProducts.map((food,index)=>(
-                <tr  key={index}>
+                    <tr  key={index}>
                     <th>{food.productid.name}</th>
                     <td>{food.productid.calories*food.quantity}</td>
                     <td>{food.productid.carbs}</td>
                     <td>{food.productid.fats}</td>
                     <td>{food.productid.protein}</td>
-                    <td><button onClick={()=>{deleteproductfrommeal((food.productid._id),"lunch",selectedDate.format('MM-DD-YYYY'))}}>del</button></td>
+                    <td><Button size="md" variant="soft" color="danger" onClick={()=>{deleteproductfrommeal((food.productid._id),"lunch",selectedDate.format('MM-DD-YYYY'))}}>del</Button></td>
 
                 </tr>
                ))}
             <tr>
-                <th><Link to="/add/lunch">add food</Link></th>
+                <th><Link to={`/add/lunch/${selectedDate}`}>add food</Link></th>
                     <td>{meal?meal.mealType.lunch.calories:0}</td>
                     <td>{macros.lunch.carbs}</td>
                     <td>{macros.lunch.fats}</td>
                     <td>{macros.lunch.protein}</td>
+                    <td></td>
             </tr>
                 <tr>
-                    <th>Dinner</th>
+                    <th colSpan={6}>Dinner</th>
                 </tr>
                 {meal.mealType.dinner.foodProducts.map((food,index)=>(
-                <tr  key={index}>
+                    <tr  key={index}>
                     <th>{food.productid.name}</th>
                     <td>{food.productid.calories*food.quantity}</td>
                     <td>{food.productid.carbs}</td>
                     <td>{food.productid.fats}</td>
                     <td>{food.productid.protein}</td>
-                    <td><button onClick={()=>{deleteproductfrommeal((food.productid._id),"dinner",selectedDate.format('MM-DD-YYYY'))}}>del</button></td>
+                    <td><Button size="md" variant="soft" color="danger" onClick={()=>{deleteproductfrommeal((food.productid._id),"dinner",selectedDate.format('MM-DD-YYYY'))}}>del</Button></td>
 
                 </tr>
                ))}
                 <tr>
-                <th><Link to="/add/dinner">add food</Link></th>
+                <th><Link to={`/add/dinner/${selectedDate}`}>add food</Link></th>
                     <td>{meal?meal.mealType.dinner.calories:0}</td>
                     <td>{macros.dinner.carbs}</td>
                     <td>{macros.dinner.fats}</td>
                     <td>{macros.dinner.protein}</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <th>Total</th>
@@ -253,6 +330,7 @@ async function getData() {
                     <td>{totalmacros.carbs.toFixed(2)}</td>
                     <td>{totalmacros.fats.toFixed(2)}</td>
                     <td>{totalmacros.protein.toFixed(2)}</td>
+                    <td></td>
                 </tr>
               
                
@@ -271,17 +349,20 @@ async function getData() {
                
                 
                 </tbody>
-               </table>
+               </Table>
+               </Sheet>
+                             </Box>
 
-               <div>
+               <Stack direction="row" spacing={1} mx={22} my={5} >
             <Macr val={calsate} max={usersdata.userBMR} macrostype={'Calories'}/>
             <Macr val={totalmacros.carbs} max={parseFloat(((usersdata.userBMR*0.60)/4).toFixed(2))} macrostype={'Carbs'}/>
             <Macr val={totalmacros.fats} max={parseFloat(((usersdata.userBMR*0.60)/9).toFixed(2))} macrostype={'Fats'}/>
             <Macr val={parseFloat((totalmacros.protein).toFixed(2))} max={parseFloat(((usersdata.userBMR*0.15)/4).toFixed(2))} macrostype={'Protein'}/>
-               </div>
+               </Stack>
 
 
-        </div>
+            </Box>
+        </>
 
         
   )
@@ -293,7 +374,7 @@ async function getData() {
 
  const Macr = ({val,max,macrostype}) => {
   return (
-    <>
+    <Box>
     <Gauge
   value={val}
   valueMax={max}
@@ -310,9 +391,9 @@ async function getData() {
     text={
         ({ value, valueMax }) => `${value} / ${valueMax}     `
     }
-/><span>{macrostype}</span>
+/><Typography sx={{paddingLeft:"58px"}} level="title-sm" variant="plain" >{macrostype}</Typography>
 
-    </>
+    </Box>
   )
 }
 

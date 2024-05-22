@@ -3,7 +3,7 @@ import { Cookies } from 'react-cookie';
 import authService from './services/authservice';
 const api = axios.create({
     baseURL: 'http://localhost:3000/', // Replace with your API base URL
-    timeout: 5000,
+    timeout: 10000,
     withCredentials: true, // Request timeout in milliseconds
   });
   api.interceptors.request.use(

@@ -26,6 +26,14 @@ const userProfileService = {
           throw new Error(error.response.data);
         }
       },
+      async updateProfile(gender,weight,height,age,activity){
+        try{
+          const respone= await api.put(`/user/updateuser`,{gender,weight,height,age,activity});
+          return respone.data;
+      } catch(error){
+          throw new Error(error.response.data);
+      }
+      }
 
 }
 export default userProfileService;

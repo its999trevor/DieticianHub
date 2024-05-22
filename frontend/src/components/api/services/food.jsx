@@ -11,6 +11,13 @@ const foodproducts={
         console.error('Error fetching data:', error);
         throw new Error(error);
     }
+}, async addCustom(name,calories,description,fats,fibers,carbs,protein){
+    try{
+        const response=await api.post(`/food/add`,{name,calories,description,fats,fibers,carbs,protein});
+        return response.data;
+    }catch(err){
+        return new Error(err);
+    }
 } 
 }
 export default foodproducts

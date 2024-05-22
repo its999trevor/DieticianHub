@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { GaugeContainer, GaugeReferenceArc, GaugeValueArc, useGaugeState } from '@mui/x-charts/Gauge';
 import mealService from '../../api/services/mealservice';
-import "./bmi.css"
+import userProfileService from '../../api/services/userprofile';
+import { Box, Button, Grid, Stack, Typography } from '@mui/joy';
 
 function GaugePointer() {
   const { valueAngle, outerRadius, cx, cy } = useGaugeState();
@@ -29,13 +30,13 @@ const Bmicomp = () => {
 
   useEffect(() => {
     fetchdata();
-  }, []);
+  }, [bmi]);
 
   async function fetchdata() {
     try {
-      let userdata = await mealService.getData();
+      let userdata = await userProfileService.getUserProfiledata();
       // console.log(userdata)
-      setBmi(userdata.userBMI);
+      setBmi(userdata.bmi);
     } catch (error) {
       console.error('Error fetching BMI data:', error);
     }
@@ -67,19 +68,32 @@ const Bmicomp = () => {
   };
 
   return (
-    <div className=' bmi'>
-    <div className='title' >Your BMI</div>
+    <Box
+    height={200}
+    boxShadow={"rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;"}
+    my={1}
+    width={400}
+    display="block"
+    gridTemplateColumns="repeat(12, 1fr)"
+    gap={4}
+    sx={{ backgroundColor: " rgba(50, 115, 220, 0.3);" }}
+  >  
+  <Box px={1}
+      sx={{ backgroundColor: " rgb(50, 115, 220)" }}>
+        <Typography sx={{ color: "white" }} level="title-lg">Your BMI</Typography>
+      </Box>
                      
-    
+    <Box mx={1.2} my={1}>
+
     <GaugeContainer className='bmicontainer'
-      width={200}
-      height={120}
+      width={400}
+      height={168}
       startAngle={-90}
       endAngle={90}
       value={bmi || 0}
       valueMax={40}
-     
-    >
+      
+      >
       <GaugeReferenceArc style={{ stroke: 'blue' }} />
       <GaugeValueArc style={{ stroke: getColor(), strokeWidth: "5px", fill: getColor() }} />
       <text
@@ -88,7 +102,7 @@ const Bmicomp = () => {
         fontSize="1.5rem"
         textAnchor="middle"
         dominantBaseline="central"
-      >
+        >
         {bmi}
       </text>
       <text
@@ -99,13 +113,14 @@ const Bmicomp = () => {
         dominantBaseline="central"
         
         
-      >
+        >
         {getWeightStatus(bmi)}
       </text>
       <GaugePointer />
     </GaugeContainer>
+          </Box>
     
-    </div>
+    </Box>
   );
 }
 

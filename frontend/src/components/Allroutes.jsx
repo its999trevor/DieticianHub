@@ -16,6 +16,7 @@ import DietPlan from './pages/DietPlan'
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
 import RequireAuth from '@auth-kit/react-router/RequireAuth'
+import UserProfile from './pages/userProfile/Userprofile'
 
 const Allroutes = () => {
   
@@ -36,8 +37,10 @@ const Allroutes = () => {
           <Route element={<AuthOutlet fallbackPath='/login' />}>
           <Route path="/home" element={<Dashboard />} />
           <Route path="/diary" element={<Diary/>} />
-          <Route path="/add/:mealtype" element={<Addfood/>} />
+          <Route path="/diary/:date" element={<Diary/>} />
+          <Route path="/add/:mealtype/:date" element={<Addfood/>} />
           <Route path="/dietplan" element={<DietPlan/>} />
+          <Route path="/profile" element={<UserProfile/>} />
           </Route>
 
           

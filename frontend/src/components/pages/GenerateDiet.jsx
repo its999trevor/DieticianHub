@@ -10,8 +10,13 @@ const GenerateDiet = () => {
     async function getdata(e){
         e.preventDefault();
         // console.log(selectedDiet)
-        let response=await diet.postDiet(selectedDiet);
-        console.log("ai working!!",response);
+        try{
+
+          let response=await diet.postDiet(selectedDiet);
+          console.log("ai working!!",response);
+        }catch(err){
+          console.log(err);
+        }
     }
   return (
         <div className="diet-plan-container">

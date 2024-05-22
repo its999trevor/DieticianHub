@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart } from '@mui/x-charts';
 import logs from '../../api/services/dailylog';
+import { Box, Button, Grid, Stack, Typography } from '@mui/joy';
 
 const Callog = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     fetchdata();
-  }, [chartData]);
+  }, []);
   // console.log(chartData);
   async function fetchdata() {
     try {
@@ -30,8 +31,22 @@ const Callog = () => {
   // console.log('ChartData:', chartData);
 
   return (
-    <div className='container prog'>
-    <div className='title' >Your Progress chart</div>
+    <Box
+    height={420}
+    mx={1}
+    my={1}
+    width={500}
+    boxShadow={"rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;"}
+    display="block"
+    gridTemplateColumns="repeat(12, 1fr)"
+    gap={4}
+    sx={{ backgroundColor: " rgba(50, 115, 220, 0.3);" }}
+  >  
+    <Box px={1}
+      sx={{ backgroundColor: " rgb(50, 115, 220)" }}>
+        <Typography sx={{ color: "white" }} level="title-lg">Your Progress chart</Typography>
+      </Box>
+      <Box my={2}></Box>
     
        <LineChart
       xAxis={[
@@ -51,12 +66,12 @@ const Callog = () => {
           showMark: false,
         }
       ]}
-      width={600}
+      width={500}
       height={400}
       margin={{ left: 70 }}
     />
     
-    </div>
+    </Box>
   );
 }
 
