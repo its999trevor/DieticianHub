@@ -27,7 +27,7 @@ const dailylog_1 = __importDefault(require("./routes/dailylog"));
 const port = process.env.PORT || 8000;
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
-app.use(express_1.default.static(path_1.default.join(__dirname, 'static')));
+app.use(express_1.default.static(path_1.default.join(__dirname, '../../frontend/dist')));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
@@ -42,5 +42,6 @@ app.use("/diet", diet_1.default);
 app.use("/log", dailylog_1.default);
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, dbconfig_1.default)();
+    // console.log(__dirname+" dest ");
     console.log(`Server started at port:${port}`);
 }));

@@ -55,7 +55,13 @@ const Loginform = () => {
 
                <form onSubmit={loginHandler}>
                  
-               <Stack spacing={1}>
+               <Typography
+               fontSize={'42px'}
+               variant="plain"
+                 color="neutral"
+               level="h1">LOGIN</Typography>
+               <Stack spacing={2}>
+
                    <Input sx={{width:"400px",minHeight:"50px"}} required  onChange={(e)=>setEmail(e.target.value)} type='email' placeholder='email address'/>
                   
                    <Input sx={{width:"400px",minHeight:"50px"}} required onChange={(e)=>setPassword(e.target.value)} type='password' placeholder='password'/>

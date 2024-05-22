@@ -27,7 +27,7 @@ const DietPlan = () => {
             }
         }
         getPlan();
-    }, []);
+    }, [dietPlan]);
 
     const handleMealChange = (category, mealName) => {
         setSelectedMeals(prevState => ({
@@ -106,7 +106,10 @@ const DietPlan = () => {
                 </div>
             )}
             </Box>
+            <div style={{marginTop:"201px"}}>
             <Footer/>
+            </div>
+                
         </>
     );
 };

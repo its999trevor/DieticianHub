@@ -33,6 +33,15 @@ const userProfileService = {
       } catch(error){
           throw new Error(error.response.data);
       }
+      },
+      async delete(){
+        try{
+
+          const response=await api.delete("/user/deleteuser");
+          return response.data;
+        }catch(err){
+          throw new Error(err);
+        }
       }
 
 }

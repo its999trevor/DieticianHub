@@ -131,9 +131,9 @@ router.put("/updateuser/",verifyToken, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-router.delete("/:userId",async (req,res)=>{
+router.delete("/deleteuser",verifyToken,async (req,res)=>{
     try{
-        const userId=req.params.userId;
+        const userId= req.user._doc._id;
         await userProfile.findOneAndDelete({userId});
         res.send("user deleted");
     }

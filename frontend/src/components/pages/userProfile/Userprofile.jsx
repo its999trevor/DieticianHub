@@ -3,12 +3,17 @@ import userProfileService from '../../api/services/userprofile';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 import Dashboardnavbar from '../Dashboardnavbar';
 import { Box, Button, Typography, Input } from '@mui/joy';
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import { useNavigate   } from 'react-router-dom';
+import Footer from '../Footer';
 
 const UserProfile = () => {
   const [userData, setUserData] = useState({});
   const auth = useAuthUser();
+  const signOut = useSignOut();
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUserData();
@@ -41,6 +46,18 @@ const UserProfile = () => {
       setMessage('Failed to update data');
     }
   };
+  async function handleDelete(){
+    try{
+
+      await signOut();
+      let response=await userProfileService.delete();
+      console.log(response);
+
+      navigate("/");
+    }catch(err){
+      console.log(err);
+    }
+  }
 
   return (
     <>
@@ -106,9 +123,10 @@ const UserProfile = () => {
             <Button variant="outlined" onClick={handleEdit}>Edit</Button>
           </Box>
         )}
-        <Button variant="outlined">Delete</Button>
+        <Button onClick={handleDelete} variant="outlined">Delete</Button>
         {message && <Typography>{message}</Typography>}
       </Box>
+      <Footer/>
     </>
   );
 };

@@ -133,9 +133,9 @@ router.put("/updateuser/", auth_1.verifyToken, (req, res) => __awaiter(void 0, v
         res.status(500).send("Internal Server Error");
     }
 }));
-router.delete("/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/deleteuser", auth_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userId = req.params.userId;
+        const userId = req.user._doc._id;
         yield userprofile_1.default.findOneAndDelete({ userId });
         res.send("user deleted");
     }

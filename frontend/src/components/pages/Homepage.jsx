@@ -7,6 +7,7 @@ import CssBaseline from '@mui/joy/CssBaseline';
 import Button from '@mui/joy/Button';
 import calimg from "../../assets/file.png"
 import Typography from '@mui/joy/Typography';
+import Footer from './Footer';
 
 
 
@@ -65,7 +66,6 @@ const Homepage = () => {
             </Typography>
             <img src={calimg} style={{width:"600px", position:"relative",bottom:"400px", left:"600px"}}/>
         </Box>
-          
     </div>
   )
 }

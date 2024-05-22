@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <Box 
     //      ="primary.main"
-     
+        display={"block"}
         sx={{background:"rgb(82,105,200)",overflow:"hidden", position:"sticky"}}
       color="white"
       py={4}

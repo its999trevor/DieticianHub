@@ -14,6 +14,7 @@ const Addfood = () => {
     const [name, setName] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [options, setOptions] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
     const [recentItems, setRecentItems] = useState([]);
     const navigate = useNavigate();
     const [openModal, setOpenModal] = useState(false);
@@ -42,20 +43,20 @@ const Addfood = () => {
     };
 
     const toggleChecked = (itemId) => {
-        setSearchResults(searchResults.map(item =>
+        setSelectedItems(selectedItems.map(item =>
             item._id === itemId ? { ...item, checked: !item.checked } : item
         ));
     };
 
     const handleQuantityChange = (itemId, quantity) => {
-        setSearchResults(searchResults.map(item =>
+        setSelectedItems(selectedItems.map(item =>
             item._id === itemId ? { ...item, quantity: parseInt(quantity) } : item
         ));
     };
 
     const addCheckedItems = async () => {
         try {
-            const checkedItems = searchResults.filter(item => item.checked);
+            const checkedItems = selectedItems.filter(item => item.checked);
             const foodProducts = checkedItems.map(item => ({
                 productid: item._id,
                 quantity: item.quantity || 1 
@@ -105,6 +106,13 @@ const Addfood = () => {
         }
     };
 
+    const handleSelectItem = (event, value) => {
+        const item = searchResults.find(result => result._id === value._id);
+        if (item && !selectedItems.some(selected => selected._id === item._id)) {
+            setSelectedItems([...selectedItems, { ...item, checked: false }]);
+        }
+    };
+
     const handleOpenModal = () => {
         setOpenModal(true);
     };
@@ -125,10 +133,11 @@ const Addfood = () => {
                     options={options}
                     getOptionLabel={(option) => option.name}
                     onInputChange={(event, value) => searchHandler(event, value)}
+                    onChange={handleSelectItem}
                     renderInput={(params) => <Input {...params} placeholder="Search food" />}
                 />
                 <Box mx={2} my={2}>
-                    {searchResults.map((item) => (
+                    {selectedItems.map((item) => (
                         <Box key={item._id} display="flex" alignItems="center" my={1}>
                             <Checkbox
                                 checked={item.checked}

@@ -30,7 +30,7 @@ const authService = {
     } catch (error) {
       throw new Error(error.response.data);
     }
-  },
+  }
   
   
   

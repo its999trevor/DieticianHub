@@ -62,7 +62,7 @@ const Profileform = () => {
           }} disabled={!gender}>Next</Button>
       </Stack>
 
-
+          
     </Box>
   )
 }

@@ -19,7 +19,7 @@ const Dashboardnavbar = () => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   async function handlelogout() {
-    await signOut();
+     signOut();
     let data = await authService.logout();
     console.log(data);
     navigate("/");

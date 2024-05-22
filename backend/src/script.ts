@@ -13,7 +13,7 @@ import dailylog from './routes/dailylog';
 const port=process.env.PORT || 8000;
 const app = express();
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
@@ -28,6 +28,7 @@ app.use("/diet",diet);
 app.use("/log",dailylog);
 app.listen(port, async () => {
       await connect();
+      // console.log(__dirname+" dest ");
       console.log(`Server started at port:${port}`);
     });
  
