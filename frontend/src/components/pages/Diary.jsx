@@ -8,6 +8,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import mealService from '../api/services/mealservice';
 import { Box,Table,Sheet, Input, Stack,Button, Typography } from '@mui/joy';
+import Footer from './Footer';
 
 const Diary = () => {
     const { date } = useParams();   
@@ -142,7 +143,7 @@ async function getData() {
       <Dashboardnavbar />
       <Box width={1000}
       
-       mx={55} px={5} py={5} my={1}  display={"flow"} boxShadow={"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;"}>
+       mx={55} px={5} py={5} my={3}  display={"flow"} boxShadow={"rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;"}>
 
       <Box>
         <Stack spacing={3}>
@@ -362,6 +363,7 @@ async function getData() {
 
 
             </Box>
+            <Footer/>
         </>
 
         

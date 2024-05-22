@@ -5,6 +5,7 @@ import userProfileService from '../api/services/userprofile';
 import { Box, Select, selectClasses, Option, Typography, IconButton } from '@mui/joy';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Footer from './Footer';
 
 const DietPlan = () => {
     const [dietPlan, setDietPlan] = useState();
@@ -45,7 +46,7 @@ const DietPlan = () => {
     return (
         <>
             <Dashboardnavbar />
-            <Box mx={4} my={3}>
+            <Box mx={4} my={5}>
 
             <GenerateDiet />
             {dietPlan && (
@@ -105,6 +106,7 @@ const DietPlan = () => {
                 </div>
             )}
             </Box>
+            <Footer/>
         </>
     );
 };

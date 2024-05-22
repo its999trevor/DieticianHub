@@ -73,6 +73,7 @@ const GenerateDiet = () => {
                     </Stack>
                 </form>
             </div>
+            
         </>
     );
 };
