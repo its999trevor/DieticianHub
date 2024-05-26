@@ -6,6 +6,7 @@ import { Box, Button, Typography, Input } from '@mui/joy';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import { useNavigate   } from 'react-router-dom';
 import Footer from '../Footer';
+import { FaUserCircle } from "react-icons/fa";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState({});
@@ -72,6 +73,7 @@ const UserProfile = () => {
       gap={4}
       p={2}
       sx={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px;" }}>
+        <FaUserCircle style={{fontSize:"114px"}} />
         <Typography level="h1" mb={2}>User Profile</Typography>
         <Box mb={4}>
           <Typography variant="subtitle1">Email: {auth.email}</Typography>

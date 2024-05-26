@@ -68,6 +68,7 @@ const GenerateDiet = () => {
                       transform: 'translate(-50%, -50%)',
                       backdropFilter: 'blur(3px)',
                       height:"100%",
+                      zIndex:'1',
                       width:"100%"
                     }} />}
                     </Stack>

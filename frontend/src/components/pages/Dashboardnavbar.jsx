@@ -36,6 +36,8 @@ const Dashboardnavbar = () => {
       case '/dietplan':
         setSelectedTab(2);
         break;
+      case '/blogpage':
+        setSelectedTab(3);
       default:
         setSelectedTab(0);
     }
@@ -45,7 +47,7 @@ const Dashboardnavbar = () => {
     <div className='navbar navcolor' style={{ display: "inline-flex", alignItems: 'center', width: '100%' }}>
       <img onClick={()=>{navigate("/home")}}
         width={250}
-        style={{ paddingInlineStart: "200px" }}
+        style={{ paddingInlineStart: "155px" }}
         alt="Logo"
         src={logo}
       />
@@ -71,6 +73,7 @@ const Dashboardnavbar = () => {
           <Tab disableIndicator component={Link} to="/home" label="Home" value={0}>Home</Tab>
           <Tab disableIndicator component={Link} to="/diary" label="Diary" value={1}>Diary</Tab>
           <Tab disableIndicator component={Link} to="/dietplan" label="Diet Plan" value={2}>Diet Plan</Tab>
+          <Tab disableIndicator component={Link} to="/blogpage" label="blog" value={3}>More</Tab>
         </TabList>
       </Tabs>
       <Dropdown

@@ -17,7 +17,8 @@ import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
 import RequireAuth from '@auth-kit/react-router/RequireAuth'
 import UserProfile from './pages/userProfile/Userprofile'
-
+import Blog from './pages/Blog'
+import Blogpage from './pages/Blogpage'
 const Allroutes = () => {
   
   const isAuth = useIsAuthenticated()
@@ -28,6 +29,7 @@ const Allroutes = () => {
             <Route path="/login"  element={!isAuth?<Login/>:<Dashboard/>}/>
             <Route path="/signup"  element={!isAuth?<Signup/>:<Dashboard/>}/>
             <Route path="/" element={!isAuth?<Homepage/>:<Dashboard/>}/>
+            {/* <Route path="/" element={!isAuth?<Homepage/>:<Dashboard/>}/> */}
           <Route path="/gender" element={!isAuth?<Profileform/>:<Dashboard/>}/>
           <Route path="/weight" element={!isAuth?<Weight />:<Dashboard/>} />
           <Route path="/height" element={!isAuth?<Height />:<Dashboard/>} />
@@ -41,6 +43,9 @@ const Allroutes = () => {
           <Route path="/add/:mealtype/:date" element={<Addfood/>} />
           <Route path="/dietplan" element={<DietPlan/>} />
           <Route path="/profile" element={<UserProfile/>} />
+          {/* <Route path="/blog" element={<Blog/>} /> */}
+          <Route path="/blogpage" element={<Blogpage/>} />
+
           </Route>
 
           
