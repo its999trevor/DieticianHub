@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import express, {Request,Response, NextFunction } from "express";
-const secretKey="opium"
+const secretKey=process.env.JWT_SECRET as string
 interface User{
     name:string;
     email:string;

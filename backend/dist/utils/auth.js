@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyToken = exports.createJwtToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const secretKey = "opium";
+const secretKey = process.env.JWT_SECRET;
 const createJwtToken = (user) => {
     const plainUser = Object.assign({}, user);
     return jsonwebtoken_1.default.sign(plainUser, secretKey, { expiresIn: "24h" });

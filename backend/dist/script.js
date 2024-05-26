@@ -32,7 +32,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
     origin: 'http://localhost:5173',
-    credentials: true, // Enable credentials (cookies, authorization headers) cross-origin
+    credentials: true,
 }));
 app.use("/", user_1.default);
 app.use("/user", userprofile_1.default);
