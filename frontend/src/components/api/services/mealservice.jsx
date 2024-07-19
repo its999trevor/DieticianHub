@@ -13,7 +13,7 @@ const mealService={
 },
 async postMeal(mealType,foodProducts,date){
    try{ 
-      console.log(mealType);
+      console.log(foodProducts);
       const response=await api.post(`/meal/${mealType}`,{foodProducts,date});
     console.log(response.data);
     return response.data;

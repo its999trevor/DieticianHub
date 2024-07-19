@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Box, Typography, Button, Autocomplete, Input, Checkbox, Modal } from '@mui/joy';
 import Newfood from './Newfood';
+import { FaCamera } from "react-icons/fa";
+
 
 const Addfood = () => {
     const { mealtype, date } = useParams();
@@ -18,6 +20,10 @@ const Addfood = () => {
     const [recentItems, setRecentItems] = useState([]);
     const navigate = useNavigate();
     const [openModal, setOpenModal] = useState(false);
+    const [image,setImage]=useState();
+    const [imageUrl,setImageUrl]=useState();
+    const [resExists,setResExists]=useState(false);
+    const [aiProd,setAiProd]=useState(false);
 
     useEffect(() => {
         const fetchOptions = async () => {
@@ -120,11 +126,67 @@ const Addfood = () => {
     const handleCloseModal = () => {
         setOpenModal(false);
     };
+    const submitImage= async (e)=>{
+        e.preventDefault();
+        const formData=new FormData();
+        formData.append("image",image);
+        let data=await foodproducts.upload(formData);
+    
+        console.log(data);
+        if(data){
+            setAiProd(data);
+            setResExists(true);
+        }
+        
+
+
+    }
+    const onInp=(e)=>{
+        const file = e.target.files[0];
+        setImage(file);
+        setImageUrl(URL.createObjectURL(file));
+    }
+    const aiProdSubmmit=async(e)=>{
+        // console.log(prodata)
+        let data=await foodproducts.addCustom(aiProd.name,aiProd.calories,aiProd.description,aiProd.fats,aiProd.fibers,aiProd.carbs,aiProd.protein);
+        console.log(data);
+        let foodProducts=[new Object()];
+        if(data.exists){
+             foodProducts =[new Object({
+                productid:data.newData[0]._id,
+                quantity:1
+            })]
+        }
+        else{
+         foodProducts =[new Object({
+            productid:data.data._id,
+            quantity:1
+        })]
+    }
+    navigate(`/diary/${selectedDate.format('YYYY-MM-DD')}`);
+    console.log(foodProducts);
+    
+        
+        
+ let data1=await mealService.postMeal(mealtype, foodProducts, selectedDate.format('MM-DD-YYYY'));
+//  console.log(data1);
+        
+
+    }
 
     return (
         <div>
             <Dashboardnavbar />
+            
             <Box mx={2} my={2}>
+                <form onSubmit={submitImage}>
+                <input type='file' accept='image/*' onChange={onInp}></input>
+                <img src={imageUrl}  style={{ width: "300px" }}></img>
+            <Button type="submit"><FaCamera  style={{fontSize:"34px"}} /></Button>
+                </form>
+                {resExists &&(<Typography level="h4" color="primary">{aiProd.description}</Typography>)}
+                {resExists &&(
+                    <Button onClick={aiProdSubmmit}>add this item</Button>)}
                 <Typography level="h1" color="primary" variant="plain">Add food to {mealtype}</Typography>
                 <Typography level="title-md" color="primary" variant="plain">Search our food database by name</Typography>
                 

@@ -4,7 +4,7 @@ const foodproducts={
     try {
         
         const response = await api.get(`/food/showitem`, { params: { name } });
-        console.log('Response Data:', response.data);
+        // console.log('Response Data:', response.data);
     
         return response.data;
     } catch (error) {
@@ -18,6 +18,17 @@ const foodproducts={
     }catch(err){
         return new Error(err);
     }
+},
+async upload(formData){
+    try{
+        const response=await api.post("/food/uploadimage",formData,{
+            headers:{"Content-Type":"multipart/form-data"}
+        })
+        return response.data;
+    }catch(err){
+        return new Error(err);
+    }
+
 } 
 }
 export default foodproducts

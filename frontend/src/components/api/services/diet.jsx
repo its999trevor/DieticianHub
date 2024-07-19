@@ -4,7 +4,7 @@ const diet={
     try {
         
         const response = await api.get(`/food/showitem`, { params: { name } });
-        // console.log('Response Data:', response.data);
+        console.log('Response Data:', response.data);
     
         return response.data;
     } catch (error) {
